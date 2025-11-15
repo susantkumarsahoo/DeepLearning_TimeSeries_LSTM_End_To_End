@@ -1,0 +1,28 @@
+{
+    "total_rows": 58936,
+    "total_columns": 2,
+    "column_names": [
+        "date",
+        "megawatthours"
+    ],
+    "missing_values": {
+        "date": 0,
+        "megawatthours": 0
+    },
+    "data_types": {
+        "date": "object",
+        "megawatthours": "int64"
+    },
+    "memory_usage_mb": 4.552787780761719,
+    "numeric_columns": [
+        "megawatthours"
+    ],
+    "categorical_columns": [
+        "date"
+    ],
+    "original_dataset_path": "C:\\Users\\TPWODL\\New folder_Content\\DeepLearning_TimeSeries_LSTM_End_To_End\\data\\raw\\Energy Demand Hourly.csv",
+    "test_size": 0.2,
+    "random_state": 42,
+    "train_set_size": 47148,
+    "test_set_size": 11788
+}

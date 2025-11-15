@@ -1,0 +1,26 @@
+{
+    "date": {
+        "dtype": "object",
+        "unique_values": 58936,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "sample_values": [
+            "01-07-2015 05:00",
+            "01-07-2015 06:00",
+            "01-07-2015 07:00",
+            "01-07-2015 08:00",
+            "01-07-2015 09:00"
+        ]
+    },
+    "megawatthours": {
+        "dtype": "int64",
+        "unique_values": 52171,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "min": 162827.0,
+        "max": 719649.0,
+        "mean": 455225.233032442,
+        "median": 443225.0,
+        "std": 74804.55001857976
+    }
+}

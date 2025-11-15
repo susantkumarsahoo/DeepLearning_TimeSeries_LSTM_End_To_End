@@ -57,4 +57,12 @@ class ProjectException(Exception):
 
     def __str__(self):
         return self.error_message
-   
+    
+
+
+'''
+try:
+    x = undefined_variable
+except Exception as e:
+    logger.error(str(ProjectException(e, sys)))    
+'''
