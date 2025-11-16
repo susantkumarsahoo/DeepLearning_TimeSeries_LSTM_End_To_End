@@ -9,7 +9,7 @@ import shutil
 from typing import Optional
 from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
-from src.entity.components_config_entity import DataIngestionConfig
+from src.entity.components_config_entity import IngestionConfig
 from src.entity.artifact_entity import IngestionArtifact
 from src.utils.helpers import (
     validate_dataset_path,
@@ -29,7 +29,7 @@ class DataIngestion:
     Data Ingestion Component for loading, validating, and splitting data.
     """
     
-    def __init__(self, config: DataIngestionConfig):
+    def __init__(self, config: IngestionConfig):
         """
         Initialize Data Ingestion component.
         

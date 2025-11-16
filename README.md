@@ -6,6 +6,7 @@ LSTM uses a Long Short-Term Memory (LSTM) network to process historical data and
 ## git commit -m "file uplode"
 ## git push origin main
 ## git pull
+## git status
 
 
 ## dvc add
@@ -16,4 +17,5 @@ LSTM uses a Long Short-Term Memory (LSTM) network to process historical data and
 ## dvc init
 ## git status
 ## git commit -m "Initialize DVC"
-## dvc add data/data.xml
+## dvc add artifacts/
+## dvc status

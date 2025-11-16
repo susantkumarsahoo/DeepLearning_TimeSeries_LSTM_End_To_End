@@ -1,5 +1,5 @@
-dvc run -n ingestion \
-  -d data/raw/Energy Demand Hourly.csv \
-  -d src/components/data_ingestion.py \
-  -o artifacts/data_ingestion/raw_data.csv \
-  python src/components/data_ingestion.py
+dvc run -n data_ingestion \
+    -d data/raw/Energy\ Demand\ Hourly.csv \
+    -d src/pipelines/training_pipeline.py \
+    -o artifacts/data_ingestion \
+    python demo.py

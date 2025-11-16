@@ -26,6 +26,8 @@ def run_data_ingestion_pipeline(dataset_path: str) -> None:
         ingestion_artifact = data_ingestion.initiate_data_ingestion()   
         
         logger.info("ML Pipeline completed successfully")
+
+        
         
         return ingestion_artifact
         

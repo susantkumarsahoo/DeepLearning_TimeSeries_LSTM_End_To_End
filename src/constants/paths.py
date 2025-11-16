@@ -27,8 +27,9 @@ DATA_INGESTION_TEST_FILE      = "test.csv"
 DATA_INGESTION_METADATA_FILE  = "metadata.json"
 DATA_INGESTION_SCHEMA_FILE    = "schema.json"
 
-TRAIN_TEST_SPLIT_RATIO: 0.2
-RANDOM_STATE: 42
+# Parameters
+TRAIN_TEST_SPLIT_RATIO = 0.2
+RANDOM_STATE = 42
 
 # =====================================================================
 # DATA VALIDATION CONSTANTS
