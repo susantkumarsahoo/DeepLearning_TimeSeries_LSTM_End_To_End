@@ -1,6 +1,7 @@
 import os
 import sys
 from src.constants.paths import *
+import src.utils.handler as read_yaml_file
 
 class DataIngestionConfig:
     def __init__(self, dataset_path: str, test_size: float = TRAIN_TEST_SPLIT_RATIO, random_state: int = RANDOM_STATE):

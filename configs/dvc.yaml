@@ -1,0 +1,5 @@
+dvc run -n ingestion \
+  -d data/raw/Energy Demand Hourly.csv \
+  -d src/components/data_ingestion.py \
+  -o artifacts/data_ingestion/raw_data.csv \
+  python src/components/data_ingestion.py
