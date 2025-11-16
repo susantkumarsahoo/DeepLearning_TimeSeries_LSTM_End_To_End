@@ -3,7 +3,7 @@ import sys
 from src.constants.paths import *
 
 class DataIngestionConfig:
-    def __init__(self, dataset_path: str, test_size: float = 0.2, random_state: int = 42):
+    def __init__(self, dataset_path: str, test_size: float = TRAIN_TEST_SPLIT_RATIO, random_state: int = RANDOM_STATE):
         self.dataset_path = dataset_path
         self.test_size = test_size
         self.random_state = random_state
