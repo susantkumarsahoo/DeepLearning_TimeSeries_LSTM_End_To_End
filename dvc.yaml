@@ -1,0 +1,85 @@
+stages:
+  data_ingestion:
+    cmd: python scripts/data_ingest.py --out-dir ${data.raw_dir} --source ${data.source}
+    deps:
+      - scripts/data_ingest.py
+      - params.yaml
+    outs:
+      - ${data.raw_dir}
+    params:
+      - data.source
+'
+  data_validation:
+    cmd: python scripts/validate.py --input-dir ${data.raw_dir} --report ${reports.validation_report}
+    deps:
+      - scripts/validate.py
+      - params.yaml
+      - ${data.raw_dir}
+    outs:
+      - ${reports.validation_report}
+    params:
+      - validation.min_rows
+      - validation.allowed_missing_ratio
+
+  data_preprocessing:
+    cmd: python scripts/preprocess.py --input-dir ${data.raw_dir} --output-dir ${data.processed_dir} --params-path params.yaml
+    deps:
+      - scripts/preprocess.py
+      - params.yaml
+      - ${data.raw_dir}
+    outs:
+      - ${data.processed_dir}
+    params:
+      - preprocess.impute_strategy
+      - preprocess.scaler
+
+  feature_engineering:
+    cmd: python scripts/feature_engine.py --input-dir ${data.processed_dir} --output-dir ${data.features_dir} --params-path params.yaml
+    deps:
+      - scripts/feature_engine.py
+      - params.yaml
+      - ${data.processed_dir}
+    outs:
+      - ${data.features_dir}
+    params:
+      - features.top_k
+      - features.feature_list
+
+  train:
+    cmd: python scripts/train.py --features-dir ${data.features_dir} --model-out ${model.path} --params-path params.yaml
+    deps:
+      - scripts/train.py
+      - params.yaml
+      - ${data.features_dir}
+    outs:
+      - ${model.path}
+    metrics:
+      - path: ${metrics.path}
+        cache: false
+    params:
+      - model.lr
+      - model.epochs
+      - model.batch_size
+
+  evaluate:
+    cmd: python scripts/evaluate.py --model ${model.path} --features-dir ${data.features_dir} --metrics-out ${metrics.path} --plots-out ${reports.plots}
+    deps:
+      - scripts/evaluate.py
+      - ${model.path}
+      - ${data.features_dir}
+    outs:
+      - ${metrics.path}
+      - ${reports.plots}
+    params:
+      - evaluate.threshold
+
+  deploy:
+    cmd: python scripts/deploy.py --model ${model.path} --deploy-dir ${deploy.dir}
+    deps:
+      - scripts/deploy.py
+      - ${model.path}
+    outs:
+      - ${deploy.dir}
+    params:
+      - deploy.target
+'

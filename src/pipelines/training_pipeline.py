@@ -1,36 +1,49 @@
-"""
-Example Usage of Data Ingestion Component
-File: main.py or pipeline.py
-"""
-
 import sys
 from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
-from src.entity.components_config_entity import DataIngestionConfig
+from src.entity.components_config_entity import IngestionConfig, ValidationConfig
 from src.components.data_ingestion import DataIngestion
+from src.components.data_validation import DataValidation
 
 logger = get_logger(__name__)
 
 
-def run_data_ingestion_pipeline(dataset_path: str) -> None:
+def run_data_ingestion_pipeline(dataset_path: str):
     """
-    Main function to run the data ingestion pipeline.
+    Executes the full ML pipeline: Data Ingestion → Data Validation.
+    Returns the final validation artifact.
     """
     try:
-        logger.info("Starting ML Pipeline")
-        logger.info("="*70)
+        logger.info("ML Pipeline Execution Started")
+        logger.info("=" * 70)
 
-        config = DataIngestionConfig(dataset_path=dataset_path,)       
-        # Initialize and run data ingestion
-        data_ingestion = DataIngestion(config=config)
-        ingestion_artifact = data_ingestion.initiate_data_ingestion()   
-        
-        logger.info("ML Pipeline completed successfully")
+        # ------------------------------------------------------------------
+        # DATA INGESTION STAGE
+        # ------------------------------------------------------------------
+        data_ingestion_config = IngestionConfig(dataset_path=dataset_path)
+        data_ingestion = DataIngestion(config=data_ingestion_config) 
 
-        
-        
-        return ingestion_artifact
-        
+        logger.info("Running Data Ingestion Stage...")
+        data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
+        logger.info("Data Ingestion Stage Completed Successfully")
+
+        # ------------------------------------------------------------------
+        # DATA VALIDATION STAGE
+        # ------------------------------------------------------------------
+        data_validation_config = ValidationConfig()
+        data_validation = DataValidation(data_ingestion_artifact=data_ingestion_artifact,
+                                         data_validation_config=data_validation_config)
+
+        logger.info("Running Data Validation Stage...")
+        data_validation_artifact  = data_validation.initiate_data_validation()
+        logger.info("Data Validation Stage Completed Successfully")
+
+        logger.info("=" * 70)
+        logger.info("ML Pipeline Finished Successfully")
+
+        return data_validation_artifact
+
     except Exception as e:
-        logger.error(f"Pipeline failed: {str(e)}")
+        logger.error(f"Pipeline failed due to: {str(e)}", exc_info=True)
         raise ProjectException(e, sys)
+

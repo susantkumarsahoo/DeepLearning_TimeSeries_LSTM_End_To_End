@@ -22,6 +22,7 @@ from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import ValidationConfig
 from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact
+from src.utils.helpers import save_json
 
 
 logger = get_logger(__name__)
@@ -315,96 +316,121 @@ class DataValidation:
         except Exception as e:
             raise ProjectException(e, sys)
         
-
-    def detect_data_drift(self,train_df: pd.DataFrame,test_df: pd.DataFrame) -> Dict[str, Any]:
+    def detect_data_drift(self, train_df: pd.DataFrame, test_df: pd.DataFrame) -> Dict[str, Any]:
         """
-        Detect data drift between training and validation sets.
-        
+        Detect data drift between training and test datasets.
+
         Args:
-            train_df: Training dataframe
-            val_df: Validation dataframe
-            
-        Returns:
-            Dictionary containing drift detection results
+            train_df (DataFrame): Training dataset.
+            test_df  (DataFrame): Test/Validation dataset.
+
+            Returns:
+            Dict[str, Any]: Drift analysis report (JSON-serializable).
         """
         try:
             logger.info("Starting data drift detection")
-            
-            drift_report = {
-                "timestamp": datetime.now().isoformat(),
-                "drift_detected": False,
-                "feature_drift": {},
-                "drift_score": 0.0
-            }
-            
+
+            drift_report: Dict[str, Any] = {
+                    "timestamp": datetime.now().isoformat(),
+                    "drift_detected": False,
+                    "feature_drift": {},
+                    "drift_score": 0.0,
+                    "drifted_features": [],
+                    "drift_percentage": 0.0
+                }
+
             drift_features = []
-            
-            # Check numerical features
+
+
+            # -----------------------------------------------
+            # NUMERICAL FEATURES
+            # -----------------------------------------------
             numerical_cols = train_df.select_dtypes(include=[np.number]).columns
+
             for col in numerical_cols:
                 train_values = train_df[col].dropna()
-                val_values = test_df[col].dropna()
-                
-                # Calculate drift metrics
-                mean_diff = abs(train_values.mean() - val_values.mean())
-                std_diff = abs(train_values.std() - val_values.std())
-                
-                # KS test
-                ks_statistic, ks_pvalue = stats.ks_2samp(train_values, val_values)
-                
-                drift_detected = ks_pvalue < 0.05
-                
+                test_values = test_df[col].dropna()
+
+                # Skip if either side empty
+                if train_values.empty or test_values.empty:
+                    drift_report["feature_drift"][col] = {
+                        "type": "numerical",
+                        "drift_detected": False,
+                        "reason": "Insufficient data for comparison"
+                    }
+                    continue
+
+                mean_diff = float(abs(train_values.mean() - test_values.mean()))
+                std_diff = float(abs(train_values.std() - test_values.std()))
+
+                ks_statistic, ks_pvalue = stats.ks_2samp(train_values, test_values)
+
+                drift_detected = bool(ks_pvalue < 0.05)
+
                 drift_report["feature_drift"][col] = {
                     "type": "numerical",
                     "drift_detected": drift_detected,
-                    "mean_difference": float(mean_diff),
-                    "std_difference": float(std_diff),
+                    "mean_difference": mean_diff,
+                    "std_difference": std_diff,
                     "ks_statistic": float(ks_statistic),
-                    "ks_pvalue": float(ks_pvalue)
+                    "ks_pvalue": float(ks_pvalue),
                 }
-                
+
                 if drift_detected:
                     drift_features.append(col)
-            
-            # Check categorical features
-            categorical_cols = train_df.select_dtypes(include=['object']).columns
-            for col in categorical_cols:
-                train_dist = train_df[col].value_counts(normalize=True)
-                val_dist = test_df[col].value_counts(normalize=True)
-                
-                # Calculate distribution difference
-                all_categories = set(train_dist.index) | set(val_dist.index)
-                dist_diff = sum(abs(train_dist.get(cat, 0) - val_dist.get(cat, 0)) 
-                               for cat in all_categories)
-                
-                drift_detected = dist_diff > 0.2  # Threshold for categorical drift
-                
-                drift_report["feature_drift"][col] = {
-                    "type": "categorical",
-                    "drift_detected": drift_detected,
-                    "distribution_difference": float(dist_diff),
-                    "train_unique_values": int(train_df[col].nunique()),
-                    "val_unique_values": int(test_df[col].nunique())
-                }
-                
-                if drift_detected:
-                    drift_features.append(col)
-            
-            # Overall drift status
-            drift_report["drift_detected"] = len(drift_features) > 0
-            drift_report["drift_score"] = round(len(drift_features) / len(train_df.columns), 3)
-            drift_report["drifted_features"] = drift_features
-            drift_report["drift_percentage"] = round(
-                len(drift_features) / len(train_df.columns) * 100, 2
-            )
-            
-            logger.info(f"Drift detection completed. Drift detected: {drift_report['drift_detected']}")
-            
-            return drift_report
-            
+
+                # -----------------------------------------------
+                # CATEGORICAL FEATURES
+                # -----------------------------------------------
+                categorical_cols = train_df.select_dtypes(include=["object", "category"]).columns
+
+                for col in categorical_cols:
+
+                    train_dist = train_df[col].value_counts(normalize=True)
+                    test_dist = test_df[col].value_counts(normalize=True)
+
+                    all_categories = set(train_dist.index) | set(test_dist.index)
+
+                    dist_diff = float(sum(
+                        abs(float(train_dist.get(cat, 0)) - float(test_dist.get(cat, 0)))
+                        for cat in all_categories
+                    ))
+
+                    drift_detected = bool(dist_diff > 0.2)      # Configurable threshold
+
+                    drift_report["feature_drift"][col] = {
+                        "type": "categorical",
+                        "drift_detected": drift_detected,
+                        "distribution_difference": dist_diff,
+                        "train_unique_values": int(train_df[col].nunique()),
+                        "test_unique_values": int(test_df[col].nunique()),
+                    }
+
+                    if drift_detected:
+                        drift_features.append(col)
+
+                # -----------------------------------------------
+                # FINAL METRICS
+                # -----------------------------------------------
+                drift_report["drift_detected"] = bool(len(drift_features) > 0)
+                drift_report["drifted_features"] = drift_features
+
+                total_cols = len(train_df.columns)
+                drift_report["drift_score"] = float(round(len(drift_features) / total_cols, 3))
+                drift_report["drift_percentage"] = float(round(
+                    len(drift_features) / total_cols * 100, 2
+                ))
+
+                logger.info(
+                    f"Data drift detection completed. Drift detected: {drift_report['drift_detected']}"
+                )
+
+                return drift_report
+
         except Exception as e:
-            raise ProjectException(e, sys)
-        
+                raise ProjectException(e, sys)
+
+    
     def validate_time_series(self,train_df: pd.DataFrame,test_df: pd.DataFrame,date_column: Optional[str] = None) -> Dict[str, Any]:
         """
         Validate time series specific properties if applicable.
@@ -437,9 +463,23 @@ class DataValidation:
                 ts_report["is_time_series"] = True
                 ts_report["date_column"] = date_column
                 
-                # Convert to datetime
-                train_df[date_column] = pd.to_datetime(train_df[date_column], errors='coerce')
-                test_df[date_column] = pd.to_datetime(test_df[date_column], errors='coerce')
+
+                # Convert to datetime safely with explicit format
+                datetime_format = "%d-%m-%Y %H:%M"
+
+                train_df[date_column] = pd.to_datetime(
+                    train_df[date_column],
+                    format=datetime_format,
+                    errors="coerce",
+                    dayfirst=True
+                )
+
+                test_df[date_column] = pd.to_datetime(
+                    test_df[date_column],
+                    format=datetime_format,
+                    errors="coerce",
+                    dayfirst=True
+                )
                 
                 # Check for temporal ordering
                 train_sorted = train_df[date_column].is_monotonic_increasing
@@ -474,15 +514,64 @@ class DataValidation:
         except Exception as e:
             raise ProjectException(e, sys)
         
+    def _convert_to_serializable(self, obj):
+        """
+        Recursively convert NumPy, Pandas, and unsupported data types 
+        into JSON-serializable Python native types.
+        """
+
+        # Handle numpy boolean
+        if isinstance(obj, (np.bool_,)):
+            return bool(obj)
+
+        # Handle numpy integers
+        if isinstance(obj, (np.int32, np.int64, np.uint32, np.uint64)):
+            return int(obj)
+
+        # Handle numpy floats
+        if isinstance(obj, (np.float32, np.float64)):
+            return float(obj)
+
+        # Handle pandas Series / Index
+        if isinstance(obj, (pd.Series, pd.Index)):
+            return obj.tolist()
+
+        # Handle pandas DataFrame
+        if isinstance(obj, pd.DataFrame):
+            return obj.to_dict(orient="list")
+
+        # Handle dictionaries (recursive)
+        if isinstance(obj, dict):
+            return {k: self._convert_to_serializable(v) for k, v in obj.items()}
+
+        # Handle lists / tuples (recursive)
+        if isinstance(obj, (list, tuple)):
+            return [self._convert_to_serializable(i) for i in obj]
+
+        # Return all other types unchanged
+        return obj
+
     def _save_report(self, report: Dict[str, Any], file_path: str) -> None:
-        """Save validation report to JSON file."""
+        """
+        Save validation report to JSON file after converting all values
+        into JSON-serializable format.
+        """
         try:
-            with open(file_path, 'w') as f:
-                json.dump(report, f, indent=4)
-            logger.info(f"Report saved to {file_path}")
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+            serializable_report = self._convert_to_serializable(report)
+
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(serializable_report, f, indent=4, ensure_ascii=False)
+
+            logger.info(f"Report saved successfully -> {file_path}")
+
         except Exception as e:
-            raise ProjectException(e, sys)
-        
+            raise ProjectException(
+                f"Failed to save validation report at {file_path}: {e}",
+                sys
+            )
+                       
     def initiate_data_validation(self) -> ValidationArtifact:
         """
         Execute all data validation steps and generate reports.

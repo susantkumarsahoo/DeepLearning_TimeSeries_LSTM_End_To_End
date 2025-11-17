@@ -177,7 +177,6 @@ def save_json(data: Dict[str, Any], file_path: str) -> None:
     except Exception as e:
         raise ProjectException(e, sys)
 
-
 def split_train_test(
     df: pd.DataFrame, 
     test_size: float = 0.2, 
