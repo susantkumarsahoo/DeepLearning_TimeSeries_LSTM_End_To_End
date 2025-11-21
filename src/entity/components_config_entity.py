@@ -51,3 +51,4 @@ class ValidationConfig:
         self.schema_validation_file = os.path.join(self.validation_dir, SCHEMA_STRUCTURE_VALIDATION_REPORT)
         self.statistical_validation_file = os.path.join(self.validation_dir, STATISTICAL_VALIDATION_REPORT)
         self.time_series_validation_file = os.path.join(self.validation_dir, TIME_SERIES_VALIDATION_REPORT)
+  

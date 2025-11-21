@@ -2,18 +2,16 @@ stages:
   data_ingestion:
     cmd: python src/data_ingestion/training_pipeline/demo.py
     deps:
-      - src/data_ingestion/training_pipeline/demo.py
-      - src/data_ingestion/__init__.py
       - src/data_ingestion/data_ingestion.py
+      - src/data_ingestion/training_pipeline/demo.py
     outs:
       - artifacts/data_ingestion
 
   data_validation:
     cmd: python src/data_validation/training_pipeline/demo.py
     deps:
-      - src/data_validation/training_pipeline/demo.py
-      - src/data_validation/__init__.py
       - src/data_validation/data_validation.py
+      - src/data_validation/training_pipeline/demo.py
       - artifacts/data_ingestion
     outs:
       - artifacts/data_validation

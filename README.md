@@ -19,3 +19,11 @@ LSTM uses a Long Short-Term Memory (LSTM) network to process historical data and
 ## git commit -m "Initialize DVC"
 ## dvc add artifacts/
 ## dvc status
+
+
+dvc init
+git add .
+git commit -m "Initialize DVC"
+git add .
+git commit -m "Run DVC pipeline"
+dvc dag
