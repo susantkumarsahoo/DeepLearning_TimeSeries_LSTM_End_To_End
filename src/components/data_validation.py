@@ -590,27 +590,27 @@ class DataValidation:
             # 1. Schema validation
             logger.info("Performing schema validation...")
             schema_report = self.validate_schema_structure(train_df, test_df)
-            self._save_report(schema_report, self.data_validation_config.schema_validation_file)
+            self._save_report(schema_report, self.data_validation_config.schema_validation_path)
             
             # 2. Data quality validation
             logger.info("Performing data quality validation...")
             quality_report = self.validate_data_quality(train_df, test_df)
-            self._save_report(quality_report, self.data_validation_config.quality_report_file)
+            self._save_report(quality_report, self.data_validation_config.quality_report_path)
             
             # 3. Statistical validation
             logger.info("Performing statistical validation...")
             statistical_report = self.validate_statistical_properties(train_df, test_df)
-            self._save_report(statistical_report, self.data_validation_config.statistical_validation_file)
+            self._save_report(statistical_report, self.data_validation_config.statistical_validation_path)
             
             # 4. Data drift detection
             logger.info("Performing drift detection...")
             drift_report = self.detect_data_drift(train_df, test_df)
-            self._save_report(drift_report, self.data_validation_config.drift_report_file)
+            self._save_report(drift_report, self.data_validation_config.drift_report_path)
             
             # 5. Time series validation
             logger.info("Performing time series validation...")
             ts_report = self.validate_time_series(train_df, test_df)
-            self._save_report(ts_report, self.data_validation_config.time_series_validation_file)
+            self._save_report(ts_report, self.data_validation_config.time_series_validation_path)
             
             # Generate overall validation status
             validation_status = {
@@ -644,16 +644,16 @@ class DataValidation:
                     "Consider retraining or investigating data sources."
                 )
             
-            self._save_report(validation_status, self.data_validation_config.validation_status_file)
+            self._save_report(validation_status, self.data_validation_config.validation_status_path)
             
             # Create validation artifact
             validation_artifact = ValidationArtifact(
-                drift_report_file=self.data_validation_config.drift_report_file,
-                validation_status_file=self.data_validation_config.validation_status_file,
-                quality_report_file=self.data_validation_config.quality_report_file,
-                schema_validation_file=self.data_validation_config.schema_validation_file,
-                statistical_validation_file=self.data_validation_config.statistical_validation_file,
-                time_series_validation_file=self.data_validation_config.time_series_validation_file
+                drift_report_file=self.data_validation_config.drift_report_path,
+                validation_status_file=self.data_validation_config.validation_status_path,
+                quality_report_file=self.data_validation_config.quality_report_path,
+                schema_validation_file=self.data_validation_config.schema_validation_path,
+                statistical_validation_file=self.data_validation_config.statistical_validation_path,
+                time_series_validation_file=self.data_validation_config.time_series_validation_path
             )
             
             logger.info("=" * 70)

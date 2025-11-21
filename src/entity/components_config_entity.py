@@ -45,10 +45,20 @@ class ValidationConfig:
         os.makedirs(self.validation_dir, exist_ok=True)
 
         # Individual report paths
-        self.drift_report_file = os.path.join(self.validation_dir, DATA_VALIDATION_DRIFT_REPORT)
-        self.validation_status_file = os.path.join(self.validation_dir, DATA_VALIDATION_STATUS_FILE)
-        self.quality_report_file = os.path.join(self.validation_dir, DATA_VALIDATION_QUALITY_REPORT)
-        self.schema_validation_file = os.path.join(self.validation_dir, SCHEMA_STRUCTURE_VALIDATION_REPORT)
-        self.statistical_validation_file = os.path.join(self.validation_dir, STATISTICAL_VALIDATION_REPORT)
-        self.time_series_validation_file = os.path.join(self.validation_dir, TIME_SERIES_VALIDATION_REPORT)
+        self.drift_report_path = os.path.join(self.validation_dir, DATA_VALIDATION_DRIFT_REPORT)
+        self.validation_status_path = os.path.join(self.validation_dir, DATA_VALIDATION_STATUS_FILE)
+        self.quality_report_path = os.path.join(self.validation_dir, DATA_VALIDATION_QUALITY_REPORT)
+        self.schema_validation_path = os.path.join(self.validation_dir, SCHEMA_STRUCTURE_VALIDATION_REPORT)
+        self.statistical_validation_path = os.path.join(self.validation_dir, STATISTICAL_VALIDATION_REPORT)
+        self.time_series_validation_path = os.path.join(self.validation_dir, TIME_SERIES_VALIDATION_REPORT)
+
+class PreprossingConfig:
+    def __init__(self):
+        self.preprocess_dir = os.path.join(ARTIFACTS_DIR, DATA_PREPROCESSING_DIR, TIMESTAMP)
+        os.makedirs(self.preprocess_dir, exist_ok=True)
+        self.train_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TRAIN_FILE)
+        self.test_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TEST_FILE)
+        self.preprocessing_report_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_REPORT_FILE)
+        
+
   

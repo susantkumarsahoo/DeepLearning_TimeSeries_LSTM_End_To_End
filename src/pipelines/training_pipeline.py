@@ -1,9 +1,10 @@
 import sys
 from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
-from src.entity.components_config_entity import IngestionConfig, ValidationConfig
+from src.entity.components_config_entity import IngestionConfig, ValidationConfig, PreprossingConfig
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
+from src.components.data_preprocessing import Preprocessing
 
 logger = get_logger(__name__)
 
@@ -41,7 +42,24 @@ def run_data_ingestion_pipeline(dataset_path: str):
         logger.info("=" * 70)
         logger.info("ML Pipeline Finished Successfully")
 
-        return data_validation_artifact
+
+        # ------------------------------------------------------------------
+        # PREPROCESSING STAGE
+        # ------------------------------------------------------------------
+        preprocessing_config = PreprossingConfig()
+        preprocessing = Preprocessing(preprocessing_config=preprocessing_config,
+                                      data_ingestion_artifact=data_ingestion_artifact,
+                                      data_validation_artifact=data_validation_artifact)
+
+        logger.info("Running Preprocessing Stage...")
+        preprocessing_artifact = preprocessing.initiate_preprocessing()
+        logger.info("Preprocessing Stage Completed Successfully")
+
+        logger.info("=" * 70)
+        logger.info("DATA PROCESSING COMPLETED SUCCESSFULLY")
+        logger.info("=" * 70)
+            
+        return preprocessing_artifact
 
     except Exception as e:
         logger.error(f"Pipeline failed due to: {str(e)}", exc_info=True)
