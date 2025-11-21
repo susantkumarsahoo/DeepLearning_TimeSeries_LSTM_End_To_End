@@ -1,19 +1,35 @@
 stages:
   data_ingestion:
-    cmd: python src/data_ingestion/training_pipeline/demo.py
+    cmd: python src/pipelines/training_pipeline.py --stage data_ingestion
     deps:
-      - src/data_ingestion/data_ingestion.py
-      - src/data_ingestion/training_pipeline/demo.py
+      - src/pipelines/training_pipeline.py
+      - src/components/data_ingestion.py
+      - src/utils/helpers.py
+      - data/raw/Energy Demand Hourly.csv
     outs:
       - artifacts/data_ingestion
 
   data_validation:
-    cmd: python src/data_validation/training_pipeline/demo.py
+    cmd: python src/pipelines/training_pipeline.py --stage data_validation
     deps:
-      - src/data_validation/data_validation.py
-      - src/data_validation/training_pipeline/demo.py
-      - artifacts/data_ingestion
+      - src/pipelines/training_pipeline.py
+      - src/components/data_validation.py
+      - artifacts/data_ingestion/split/train.csv
+      - artifacts/data_ingestion/split/test.csv
     outs:
       - artifacts/data_validation
+
+  demo:
+    cmd: python demo.py
+    deps:
+      - demo.py
+      - artifacts/data_ingestion
+      - artifacts/data_validation
+    outs:
+      - artifacts/demo_output
+
+
+      
+
 
   

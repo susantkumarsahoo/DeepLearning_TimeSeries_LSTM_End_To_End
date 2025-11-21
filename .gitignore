@@ -213,4 +213,6 @@ data_ingestion
 artifacts\data_validation\
 data_validation
 
+artifacts/*
+
 

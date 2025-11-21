@@ -27,3 +27,4 @@ git commit -m "Initialize DVC"
 git add .
 git commit -m "Run DVC pipeline"
 dvc dag
+dvc repro
