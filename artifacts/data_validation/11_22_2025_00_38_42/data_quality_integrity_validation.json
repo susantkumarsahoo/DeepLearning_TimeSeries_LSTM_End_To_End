@@ -1,0 +1,51 @@
+{
+    "timestamp": "2025-11-22T00:38:51.900710",
+    "train_quality": {
+        "total_rows": 47148,
+        "total_columns": 2,
+        "missing_values": {},
+        "duplicate_rows": 0,
+        "duplicate_percentage": 0.0,
+        "constant_columns": [],
+        "high_cardinality_columns": [
+            {
+                "column": "date",
+                "unique_count": 47148,
+                "unique_ratio": 1.0
+            }
+        ],
+        "outlier_detection": {
+            "megawatthours": {
+                "count": 1756,
+                "percentage": 3.72,
+                "lower_bound": 271981.75,
+                "upper_bound": 623355.75
+            }
+        }
+    },
+    "val_quality": {},
+    "overall_status": "PASSED",
+    "test_quality": {
+        "total_rows": 11788,
+        "total_columns": 2,
+        "missing_values": {},
+        "duplicate_rows": 0,
+        "duplicate_percentage": 0.0,
+        "constant_columns": [],
+        "high_cardinality_columns": [
+            {
+                "column": "date",
+                "unique_count": 11788,
+                "unique_ratio": 1.0
+            }
+        ],
+        "outlier_detection": {
+            "megawatthours": {
+                "count": 469,
+                "percentage": 3.98,
+                "lower_bound": 275514.375,
+                "upper_bound": 620557.375
+            }
+        }
+    }
+}

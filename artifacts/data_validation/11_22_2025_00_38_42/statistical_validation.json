@@ -1,0 +1,35 @@
+{
+    "timestamp": "2025-11-22T00:38:51.939336",
+    "numerical_features": {
+        "megawatthours": {
+            "train_stats": {
+                "mean": 455155.53183592093,
+                "std": 74910.52540877633,
+                "min": 162827.0,
+                "max": 718110.0,
+                "median": 443082.5,
+                "skewness": 0.8228870596812771,
+                "kurtosis": 0.43603574764519415
+            },
+            "val_stats": {
+                "mean": 455504.01416694943,
+                "std": 74381.68573981285,
+                "min": 302518.0,
+                "max": 719649.0,
+                "median": 443754.5,
+                "skewness": 0.8084711284908783,
+                "kurtosis": 0.45916511735944887
+            }
+        }
+    },
+    "statistical_tests": {
+        "megawatthours": {
+            "ks_test": {
+                "statistic": 0.01110771360751861,
+                "p_value": 0.19356396328862202,
+                "distributions_similar": true
+            }
+        }
+    },
+    "warnings": []
+}

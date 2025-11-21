@@ -1,0 +1,24 @@
+{
+    "timestamp": "2025-11-22T00:38:51.894123",
+    "train_shape": [
+        47148,
+        2
+    ],
+    "val_shape": [
+        11788,
+        2
+    ],
+    "schema_match": true,
+    "issues": [],
+    "columns": {
+        "total_columns": 2,
+        "column_names": [
+            "megawatthours",
+            "date"
+        ],
+        "data_types": {
+            "date": "object",
+            "megawatthours": "int64"
+        }
+    }
+}

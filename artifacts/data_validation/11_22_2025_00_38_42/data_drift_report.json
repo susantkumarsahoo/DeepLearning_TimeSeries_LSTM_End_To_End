@@ -1,0 +1,26 @@
+{
+    "timestamp": "2025-11-22T00:38:51.971490",
+    "drift_detected": true,
+    "feature_drift": {
+        "megawatthours": {
+            "type": "numerical",
+            "drift_detected": false,
+            "mean_difference": 348.4823310284992,
+            "std_difference": 528.8396689634828,
+            "ks_statistic": 0.01110771360751861,
+            "ks_pvalue": 0.19356396328862202
+        },
+        "date": {
+            "type": "categorical",
+            "drift_detected": true,
+            "distribution_difference": 2.0000000000018123,
+            "train_unique_values": 47148,
+            "test_unique_values": 11788
+        }
+    },
+    "drift_score": 0.5,
+    "drifted_features": [
+        "date"
+    ],
+    "drift_percentage": 50.0
+}
