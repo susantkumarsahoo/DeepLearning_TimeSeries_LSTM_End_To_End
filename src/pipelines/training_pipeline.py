@@ -65,3 +65,12 @@ def run_data_ingestion_pipeline(dataset_path: str):
         logger.error(f"Pipeline failed due to: {str(e)}", exc_info=True)
         raise ProjectException(e, sys)
 
+
+if __name__ == "__main__":
+
+    dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
+    main =  run_data_ingestion_pipeline(dataset_path=dataset_path)
+
+    print(main)
+
+    # python src/pipelines/training_pipeline.py
