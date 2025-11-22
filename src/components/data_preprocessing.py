@@ -25,8 +25,10 @@ from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import ValidationConfig, PreprossingConfig
 from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact, PreprocessingArtifact
-from src.utils.helpers import save_json
-from src.utils.pre_helper import generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr
+from src.utils.helpers import save_json,convert_timestamps_to_strings
+from src.utils.pre_helper import (generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr,
+                                  analyze_seasonal_decomposition)
+
 
 
 
@@ -83,6 +85,7 @@ class Preprocessing:
 
             # Merge into one dataset
             df = pd.concat([train_df, test_df], axis=0, ignore_index=True)
+            df['date'] = pd.to_datetime(df['date'], format='%d-%m-%Y %H:%M', errors='coerce')
             logger.info(f"Merged dataset shape: {df.shape}")
 
             # -------------------------------------------------------
@@ -107,10 +110,14 @@ class Preprocessing:
 
             logger.info("Outliers detected successfully.")
 
+            # sesonal decomposition
+            decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
+
             final_report = {
                 "data_profile": data_profile,
                 "correlation_report": correlation_report,
-                "outliers_report": outlayers_report
+                "outliers_report": outlayers_report,
+                "decomposition_report": decomposition_report
             }
 
             # Save all reports

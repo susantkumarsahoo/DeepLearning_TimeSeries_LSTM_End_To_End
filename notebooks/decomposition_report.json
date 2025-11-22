@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "analysis_date": "2025-11-23T04:14:21.523249",
+    "column_analyzed": "megawatthours",
+    "model_type": "additive",
+    "period": 12,
+    "total_observations": 58936,
+    "date_range": {
+      "start": "2015-07-01T05:00:00",
+      "end": "2022-03-21T20:00:00"
+    }
+  },
+  "original_series": {
+    "mean": 455225.233032442,
+    "std": 74804.55001857976,
+    "min": 162827.0,
+    "max": 719649.0,
+    "median": 443225.0
+  },
+  "trend_component": {
+    "mean": 455238.8149622112,
+    "std": 61953.69241830488,
+    "min": 321901.0,
+    "max": 679911.8750000001,
+    "non_null_count": 58924,
+    "trend_direction": "increasing",
+    "change_percent": 0.6272683569072744
+  },
+  "seasonal_component": {
+    "mean": -0.5148669556278943,
+    "std": 11608.880436242383,
+    "min": -15073.484279557346,
+    "max": 17560.910072459472,
+    "amplitude": 32634.394352016818,
+    "non_null_count": 58936
+  },
+  "residual_component": {
+    "mean": 0.8215249748830205,
+    "std": 20383.994930964152,
+    "min": -77389.47979036796,
+    "max": 124841.80181180447,
+    "non_null_count": 58924,
+    "outliers_count": 12
+  },
+  "decomposition_quality": {
+    "residual_variance_ratio": 7.4254465396566935,
+    "seasonal_strength": 0.24491162260955024,
+    "trend_strength": 0.9238984012701741
+  },
+  "sample_data": {
+    "trend_head": {
+      

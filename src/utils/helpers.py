@@ -153,6 +153,56 @@ def generate_dataset_schema(df: pd.DataFrame) -> Dict[str, Any]:
         
     except Exception as e:
         raise ProjectException(e, sys)
+    
+
+def convert_timestamps_to_strings(data):
+    """Recursively converts Timestamp keys (and values) in a dict/list to strings."""
+    if isinstance(data, dict):
+        return {
+            str(k) if isinstance(k, pd.Timestamp) else k: convert_timestamps_to_strings(v) 
+            for k, v in data.items()
+        }
+    elif isinstance(data, list):
+        return [convert_timestamps_to_strings(element) for element in data]
+    elif isinstance(data, pd.Timestamp):
+        return str(data)
+    else:
+        return data
+    
+import json
+import os
+from typing import Dict, Any 
+# You'll need to ensure ProjectException, logger, and sys are available
+
+def save_json_new(data: Dict[str, Any], file_path: str) -> None:
+    """
+    Save dictionary data to JSON file. 
+    It automatically converts pandas Timestamp objects within the data to strings.
+    
+    Args:
+        data: Dictionary to save
+        file_path: Destination file path
+        
+    Raises:
+        ProjectException: If saving fails
+    """
+    try:
+        # 1. Convert any Timestamp objects (keys or values) to strings
+        cleaned_data = convert_timestamps_to_strings(data)
+        
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        
+        with open(file_path, 'w') as f:
+            # 2. Dump the cleaned data
+            json.dump(cleaned_data, f, indent=4)
+        
+        logger.info(f"JSON data saved to: {file_path}")
+        
+    except Exception as e:
+        # Note: If you want to be specific, you can catch TypeError first
+        # and re-raise it with a clearer message, but your current exception handling is fine.
+        raise ProjectException(e, sys)
 
 
 def save_json(data: Dict[str, Any], file_path: str) -> None:
@@ -176,6 +226,7 @@ def save_json(data: Dict[str, Any], file_path: str) -> None:
         
     except Exception as e:
         raise ProjectException(e, sys)
+    
 
 def split_train_test(
     df: pd.DataFrame, 

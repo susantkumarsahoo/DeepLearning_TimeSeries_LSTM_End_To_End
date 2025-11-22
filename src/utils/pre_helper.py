@@ -248,3 +248,141 @@ def detect_outliers_iqr(df: pd.DataFrame, column: str, json_output_path: str = N
 
 
 
+import pandas as pd
+import numpy as np
+import json
+from statsmodels.tsa.seasonal import seasonal_decompose
+from datetime import datetime
+
+def analyze_seasonal_decomposition(df, column_name, date_column=None, model='additive', period=12):
+    """
+    Perform seasonal decomposition on time series data and return JSON report.
+    
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame with time series data
+    column_name : str
+        Name of the column to analyze
+    date_column : str, optional
+        Name of the date column to use as index (if not already indexed)
+    model : str, default='additive'
+        Type of seasonal component ('additive' or 'multiplicative')
+    period : int, default=12
+        Number of observations per cycle
+        
+    Returns:
+    --------
+    dict : JSON-formatted report with decomposition results
+    """
+    
+    # Make a copy to avoid modifying original
+    df_copy = df.copy()
+    
+    # Validate inputs
+    if column_name not in df_copy.columns:
+        return {"error": f"Column '{column_name}' not found in DataFrame"}
+    
+    # Convert index to datetime if needed
+    if not isinstance(df_copy.index, pd.DatetimeIndex):
+        if date_column is not None:
+            if date_column not in df_copy.columns:
+                return {"error": f"Date column '{date_column}' not found in DataFrame"}
+            try:
+                df_copy[date_column] = pd.to_datetime(df_copy[date_column])
+                df_copy = df_copy.set_index(date_column)
+                df_copy = df_copy.sort_index()
+            except Exception as e:
+                return {"error": f"Failed to convert '{date_column}' to datetime: {str(e)}"}
+        else:
+            # Try to find a date column automatically
+            date_cols = [col for col in df_copy.columns if 'date' in col.lower() or 'time' in col.lower()]
+            if date_cols:
+                try:
+                    df_copy[date_cols[0]] = pd.to_datetime(df_copy[date_cols[0]])
+                    df_copy = df_copy.set_index(date_cols[0])
+                    df_copy = df_copy.sort_index()
+                except Exception as e:
+                    return {"error": f"Auto-detected date column '{date_cols[0]}' conversion failed. Please specify 'date_column' parameter: {str(e)}"}
+            else:
+                return {"error": "No DatetimeIndex found. Please specify 'date_column' parameter or ensure DataFrame has a datetime index"}
+    
+    # Extract time series
+    ts = df_copy[column_name].dropna()
+    
+    if len(ts) < 2 * period:
+        return {"error": f"Insufficient data points. Need at least {2*period}, got {len(ts)}"}
+    
+    # Perform decomposition
+    try:
+        result = seasonal_decompose(ts, model=model, period=period)
+    except Exception as e:
+        return {"error": f"Decomposition failed: {str(e)}"}
+    
+    # Extract components
+    trend = result.trend.dropna()
+    seasonal = result.seasonal.dropna()
+    residual = result.resid.dropna()
+    
+    # Calculate statistics
+    report = {
+        "metadata": {
+            "analysis_date": datetime.now().isoformat(),
+            "column_analyzed": column_name,
+            "model_type": model,
+            "period": period,
+            "total_observations": len(ts),
+            "date_range": {
+                "start": ts.index.min().isoformat(),
+                "end": ts.index.max().isoformat()
+            }
+        },
+        "original_series": {
+            "mean": float(ts.mean()),
+            "std": float(ts.std()),
+            "min": float(ts.min()),
+            "max": float(ts.max()),
+            "median": float(ts.median())
+        },
+        "trend_component": {
+            "mean": float(trend.mean()),
+            "std": float(trend.std()),
+            "min": float(trend.min()),
+            "max": float(trend.max()),
+            "non_null_count": int(len(trend)),
+            "trend_direction": "increasing" if trend.iloc[-1] > trend.iloc[0] else "decreasing",
+            "change_percent": float(((trend.iloc[-1] - trend.iloc[0]) / trend.iloc[0]) * 100) if trend.iloc[0] != 0 else None
+        },
+        "seasonal_component": {
+            "mean": float(seasonal.mean()),
+            "std": float(seasonal.std()),
+            "min": float(seasonal.min()),
+            "max": float(seasonal.max()),
+            "amplitude": float(seasonal.max() - seasonal.min()),
+            "non_null_count": int(len(seasonal))
+        },
+        "residual_component": {
+            "mean": float(residual.mean()),
+            "std": float(residual.std()),
+            "min": float(residual.min()),
+            "max": float(residual.max()),
+            "non_null_count": int(len(residual)),
+            "outliers_count": int(np.sum(np.abs(residual) > 3 * residual.std()))
+        },
+        "decomposition_quality": {
+            "residual_variance_ratio": float((residual.var() / ts.var()) * 100),
+            "seasonal_strength": float(1 - (residual.var() / (seasonal + residual).var())) if (seasonal + residual).var() != 0 else None,
+            "trend_strength": float(1 - (residual.var() / (trend + residual).var())) if (trend + residual).dropna().var() != 0 else None
+        },
+        "sample_data": {
+            "trend_head": trend.head(5).to_dict(),
+            "seasonal_head": seasonal.head(5).to_dict(),
+            "residual_head": residual.head(5).to_dict()
+        }
+    }
+    
+    return report
+
+
+
+
