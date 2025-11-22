@@ -89,7 +89,6 @@ class Preprocessing:
             # 3. Generate data profile JSON
             # -------------------------------------------------------
             data_profile = generate_data_profile(df)
-            save_json(data_profile,self.preprocessing_config.preprocessing_report_path)
 
             logger.info("Data profile JSON saved successfully.")
 
@@ -99,16 +98,25 @@ class Preprocessing:
             logger.info("Time features added successfully.")
 
             # Generate correlation report
-            correlation_report = generate_correlation_report(df,output_path=None)
-            save_json(correlation_report,self.preprocessing_config.preprocessing_report_path)
+            correlation_report = generate_correlation_report(df)
 
             logger.info("Correlation report saved successfully.")
 
             # Detect outliers
             outlayers_report = detect_outliers_iqr(df,column='megawatthours',json_output_path=None)
-            save_json(outlayers_report,self.preprocessing_config.preprocessing_report_path)
 
             logger.info("Outliers detected successfully.")
+
+            final_report = {
+                "data_profile": data_profile,
+                "correlation_report": correlation_report,
+                "outliers_report": outlayers_report
+            }
+
+            # Save all reports
+
+            save_json(final_report, self.preprocessing_config.preprocessing_report_path)
+            logger.info("All reports saved successfully.")
 
             # -------------------------------------------------------
             # 4. Re-split processed dataset
@@ -146,3 +154,7 @@ class Preprocessing:
 
         except Exception as e:
             raise ProjectException(e, sys)
+        
+
+
+

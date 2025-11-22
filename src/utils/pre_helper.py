@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 
 def generate_data_profile(df: pd.DataFrame, save_path: str = None):
     """
@@ -117,25 +118,25 @@ import pandas as pd
 import json
 import os
 
-def generate_correlation_report(df: pd.DataFrame, output_path: str) -> dict:
+def generate_correlation_report(df: pd.DataFrame, output_path: str = None) -> dict:
     """
-    Generates a correlation metrics report identifying:
-    1. Strong correlations (> 0.80 or < -0.80)
-    2. Weak correlations (< 0.01 and > -0.01)
-    
-    Saves the report as a JSON file and returns the report dictionary.
+    Generates a correlation metrics report:
+    1. Strong correlations (>|0.80|)
+    2. Very weak correlations (< 0.01)
+
+    Optionally saves the report as JSON.
 
     Parameters
     ----------
     df : pd.DataFrame
         Input dataframe.
-    output_path : str
-        Path where the JSON report will be saved.
+    output_path : str, optional
+        File path to save JSON report.
 
     Returns
     -------
     dict
-        Correlation metrics summary.
+        Correlation summary report.
     """
 
     # Compute correlation matrix
@@ -144,68 +145,79 @@ def generate_correlation_report(df: pd.DataFrame, output_path: str) -> dict:
     strong_corr = []
     weak_corr = []
 
-    # Identify correlations
-    for col1 in corr_matrix.columns:
-        for col2 in corr_matrix.columns:
-            if col1 != col2:
-                value = corr_matrix.loc[col1, col2]
+    # Iterate through upper triangle only (avoid duplicate pairs)
+    cols = corr_matrix.columns
+    for i in range(len(cols)):
+        for j in range(i + 1, len(cols)):
+            col1 = cols[i]
+            col2 = cols[j]
+            value = corr_matrix.iloc[i, j]
 
-                # Strong correlation > 0.80 or < -0.80
-                if abs(value) >= 0.80:
-                    strong_corr.append({
-                        "feature_1": col1,
-                        "feature_2": col2,
-                        "correlation": round(float(value), 4)
-                    })
+            # Strong correlation
+            if abs(value) >= 0.80:
+                strong_corr.append({
+                    "feature_1": col1,
+                    "feature_2": col2,
+                    "correlation": round(float(value), 4)
+                })
 
-                # Very weak correlation < 0.01
-                if abs(value) <= 0.01:
-                    weak_corr.append({
-                        "feature_1": col1,
-                        "feature_2": col2,
-                        "correlation": round(float(value), 4)
-                    })
+            # Very weak correlation
+            if abs(value) <= 0.01:
+                weak_corr.append({
+                    "feature_1": col1,
+                    "feature_2": col2,
+                    "correlation": round(float(value), 4)
+                })
 
-    # Prepare JSON report
+    # Prepare report
     report = {
         "strong_correlations_(>|0.80|)": strong_corr,
         "very_weak_correlations_(<0.01)": weak_corr
     }
-    return df, report
+
+    # Save JSON (if required)
+    #if output_path is not None:
+    #    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    #    with open(output_path, "w") as json_file:
+    #       json.dump(report, json_file, indent=4)
+
+
+
+    return report
+
 
 
 import numpy as np
 import pandas as pd
 import json
 import os
-import matplotlib.pyplot as plt
 
-
-def detect_outliers_iqr(df: pd.DataFrame, column: str, json_output_path: str):
+def detect_outliers_iqr(df: pd.DataFrame, column: str, json_output_path: str = None):
     """
-    Detect outliers using IQR method and return:
-      - Cleaned dataframe (without outliers)
-      - Detailed outlier report saved as JSON
+    Detect outliers using the IQR method and return:
+      - Outlier report (dict)
+      - Optionally save report to JSON
 
     Parameters
     ----------
     df : pd.DataFrame
         Input dataframe.
     column : str
-        Column on which outlier detection will be applied.
-    json_output_path : str
-        Path for saving the JSON report.
+        Column for outlier detection.
+    json_output_path : str, optional
+        Path to save the JSON outlier report.
 
     Returns
     -------
-    cleaned_df : pd.DataFrame
-        Dataframe without outliers.
     report : dict
         Dictionary containing outlier detection summary.
     """
-    column = 'megawatthours'
+
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' not found in dataframe.")
+
     # Convert to NumPy array
-    data_array = df[column].to_numpy()
+    data_array = df[column].dropna().to_numpy()
 
     # Compute Q1, Q3 and IQR
     Q1 = np.percentile(data_array, 25)
@@ -219,12 +231,7 @@ def detect_outliers_iqr(df: pd.DataFrame, column: str, json_output_path: str):
     # Outliers
     outliers = data_array[(data_array < lower_bound) | (data_array > upper_bound)]
 
-    # Create cleaned dataframe
-    # cleaned_df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
-
-    # --------------------------
     # Prepare JSON Report
-    # --------------------------
     report = {
         "column": column,
         "total_records": int(len(data_array)),
@@ -234,10 +241,10 @@ def detect_outliers_iqr(df: pd.DataFrame, column: str, json_output_path: str):
         "lower_bound": float(lower_bound),
         "upper_bound": float(upper_bound),
         "total_outliers": int(len(outliers)),
-        "outlier_values": outliers.tolist(),
+    
     }
 
-    return df, report
+    return report
 
 
 
