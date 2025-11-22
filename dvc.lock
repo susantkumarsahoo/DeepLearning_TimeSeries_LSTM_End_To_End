@@ -1,15 +1,15 @@
 schema: '2.0'
 stages:
   data_ingestion:
-    cmd: python src/pipelines/training_pipeline.py
+    cmd: python demo.py
     deps:
-    - path: src/pipelines/training_pipeline.py
+    - path: demo.py
       hash: md5
-      md5: cb2ca3fd1d408f783dde2e3ecb0236e7
-      size: 3296
+      md5: 2338be03f0d3b5619e2790580c9bb5de
+      size: 502
     outs:
     - path: artifacts/data_preprocessing
       hash: md5
-      md5: 460ceba6115d9a2ba82d76c677e8e52c.dir
+      md5: 81b1510f76b421bd2ae06d40236cc240.dir
       size: 2300265
       nfiles: 3
