@@ -25,7 +25,7 @@ from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import ValidationConfig, PreprossingConfig
 from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact, PreprocessingArtifact
-from src.utils.helpers import save_json,convert_timestamps_to_strings
+from src.utils.helpers import save_json,save_json_new,save_json_data
 from src.utils.pre_helper import (generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr,
                                   analyze_seasonal_decomposition)
 
@@ -122,7 +122,7 @@ class Preprocessing:
 
             # Save all reports
 
-            save_json(final_report, self.preprocessing_config.preprocessing_report_path)
+            save_json_new(final_report, self.preprocessing_config.preprocessing_report_path)
             logger.info("All reports saved successfully.")
 
             # -------------------------------------------------------

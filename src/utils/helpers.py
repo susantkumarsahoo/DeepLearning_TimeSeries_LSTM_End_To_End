@@ -155,54 +155,83 @@ def generate_dataset_schema(df: pd.DataFrame) -> Dict[str, Any]:
         raise ProjectException(e, sys)
     
 
-def convert_timestamps_to_strings(data):
-    """Recursively converts Timestamp keys (and values) in a dict/list to strings."""
-    if isinstance(data, dict):
-        return {
-            str(k) if isinstance(k, pd.Timestamp) else k: convert_timestamps_to_strings(v) 
-            for k, v in data.items()
-        }
-    elif isinstance(data, list):
-        return [convert_timestamps_to_strings(element) for element in data]
-    elif isinstance(data, pd.Timestamp):
-        return str(data)
-    else:
-        return data
+def save_json_new(data: Any, file_path: str) -> None:
+    """
+    Universal JSON-safe serializer and saver.
+    Converts all non-serializable objects (Timestamp, numpy types,
+    datetime, UUID, sets, tuples, custom classes) into JSON-safe formats.
     
-import json
-import os
-from typing import Dict, Any 
-# You'll need to ensure ProjectException, logger, and sys are available
+    Guarantees zero serialization errors.
+    """
 
-def save_json_new(data: Dict[str, Any], file_path: str) -> None:
-    """
-    Save dictionary data to JSON file. 
-    It automatically converts pandas Timestamp objects within the data to strings.
-    
-    Args:
-        data: Dictionary to save
-        file_path: Destination file path
-        
-    Raises:
-        ProjectException: If saving fails
-    """
+    import json
+    import os
+    import numpy as np
+    import pandas as pd
+    import datetime
+    from uuid import UUID
+
     try:
-        # 1. Convert any Timestamp objects (keys or values) to strings
-        cleaned_data = convert_timestamps_to_strings(data)
-        
-        # Ensure the directory exists
+        def to_serializable(obj):
+            """
+            Recursively convert non-serializable objects into JSON-safe formats.
+            """
+
+            # --- Basic Python types ---
+            if isinstance(obj, (str, int, float, bool)) or obj is None:
+                return obj
+
+            # --- Pandas Timestamp / datetime ---
+            if isinstance(obj, (pd.Timestamp, datetime.datetime, datetime.date)):
+                return obj.isoformat()
+
+            # --- Numpy types ---
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            if isinstance(obj, (np.floating,)):
+                return float(obj)
+            if isinstance(obj, (np.ndarray,)):
+                return obj.tolist()
+
+            # --- UUID ---
+            if isinstance(obj, UUID):
+                return str(obj)
+
+            # --- Dict (ensure keys become str) ---
+            if isinstance(obj, dict):
+                return {str(k): to_serializable(v) for k, v in obj.items()}
+
+            # --- List / Tuple / Set ---
+            if isinstance(obj, (list, tuple, set)):
+                return [to_serializable(i) for i in obj]
+
+            # --- Pandas Series ---
+            if isinstance(obj, pd.Series):
+                return obj.apply(to_serializable).to_dict()
+
+            # --- Pandas DataFrame ---
+            if isinstance(obj, pd.DataFrame):
+                return obj.applymap(to_serializable).to_dict(orient="records")
+
+            # --- Any other object ---
+            return str(obj)
+
+        # Convert all data
+        safe_data = to_serializable(data)
+
+        # Ensure directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        
-        with open(file_path, 'w') as f:
-            # 2. Dump the cleaned data
-            json.dump(cleaned_data, f, indent=4)
-        
-        logger.info(f"JSON data saved to: {file_path}")
-        
+
+        # Save JSON
+        with open(file_path, "w") as f:
+            json.dump(safe_data, f, indent=4)
+
+        logger.info(f"JSON saved successfully: {file_path}")
+
     except Exception as e:
-        # Note: If you want to be specific, you can catch TypeError first
-        # and re-raise it with a clearer message, but your current exception handling is fine.
         raise ProjectException(e, sys)
+
+    
 
 
 def save_json(data: Dict[str, Any], file_path: str) -> None:
@@ -226,6 +255,51 @@ def save_json(data: Dict[str, Any], file_path: str) -> None:
         
     except Exception as e:
         raise ProjectException(e, sys)
+    
+
+import json
+import os
+from typing import Any, Dict
+from datetime import datetime
+
+class SaveJsonException(Exception):
+    """Custom exception for JSON saving errors."""
+    pass
+
+
+def save_json_data(data: Dict[str, Any], file_path: str) -> None:
+    """
+    Save dictionary data to a JSON file with full reliability.
+    
+    Key Capabilities:
+    -----------------
+    • Creates directories automatically  
+    • Supports UTF-8 encoding  
+    • Atomic write operation (prevents corruption)  
+    • Graceful error handling  
+    • Works for all valid JSON-serializable objects  
+    """
+
+    try:
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Temporary file for atomic operation
+        temp_file = f"{file_path}.tmp_{datetime.now().timestamp()}"
+
+        # Write JSON safely
+        with open(temp_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+
+        # Replace old file atomically
+        os.replace(temp_file, file_path)
+
+    except Exception as e:
+        raise SaveJsonException(
+            f"Failed to save JSON file at: {file_path}. Error: {str(e)}"
+        ) from e
+
+
     
 
 def split_train_test(
