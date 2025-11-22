@@ -7,8 +7,14 @@ artifact = run_data_ingestion_pipeline(dataset_path=dataset_path)
 print(artifact)
 
 
-
-
-
+'''
+stages:
+  data_ingestion:
+    cmd: python src/pipelines/training_pipeline.py
+    deps:
+      - src/pipelines/training_pipeline.py
+    outs:
+      - artifacts/data_preprocessing
+'''
 
 
