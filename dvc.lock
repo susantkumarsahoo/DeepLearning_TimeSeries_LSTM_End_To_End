@@ -1,0 +1,73 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/pipelines/data_ingestion_pipeline.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 9e5035ef8d090657e02949c66c4750ab.dir
+      size: 2289368
+      nfiles: 4
+    - path: src/components/data_ingestion.py
+      hash: md5
+      md5: 5ab6b87116d21ce9eb863c31a39c90c3
+      size: 8933
+    - path: src/pipelines/data_ingestion_pipeline.py
+      hash: md5
+      md5: c5c7432bd34bfc2d4729d677b3aa4b35
+      size: 1156
+    outs:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 96880b21a94633a7e8aee05bea3f719c.dir
+      size: 4421640
+      nfiles: 6
+  data_validation:
+    cmd: python src/pipelines/data_validation_pipeline.py
+    deps:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 29c67e433b4797d990af8d65ab267b13.dir
+      size: 8843280
+      nfiles: 12
+    - path: src/components/data_validation.py
+      hash: md5
+      md5: c400b0a8f781004a1b8a40cdf7691b5c
+      size: 28032
+    - path: src/pipelines/data_validation_pipeline.py
+      hash: md5
+      md5: 4d592c4ebff1e2932fe8e8fe68624d3a
+      size: 1447
+    outs:
+    - path: artifacts/data_validation
+      hash: md5
+      md5: bcfc6176005537d8b12ac517c5aa26c9.dir
+      size: 4736
+      nfiles: 6
+  data_preprocessing:
+    cmd: python src/pipelines/data_preprocessing_pipeline.py
+    deps:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 42faa356c6f6bfc3eeafb25e6a20b58d.dir
+      size: 13264920
+      nfiles: 18
+    - path: artifacts/data_validation
+      hash: md5
+      md5: b121874c8fb01563bcdb52dcba746c95.dir
+      size: 9472
+      nfiles: 12
+    - path: src/components/data_preprocessing.py
+      hash: md5
+      md5: 8cdd9860208a9cdad830a8d76561c422
+      size: 6504
+    - path: src/pipelines/data_preprocessing_pipeline.py
+      hash: md5
+      md5: c2f8ac9df4651b534982065cf493ec9a
+      size: 1736
+    outs:
+    - path: artifacts/data_preprocessing
+      hash: md5
+      md5: 4dca46a4d02d263b6471a46fef060d31.dir
+      size: 2303106
+      nfiles: 3
