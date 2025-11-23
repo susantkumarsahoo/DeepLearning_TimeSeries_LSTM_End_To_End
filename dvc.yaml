@@ -2,7 +2,8 @@ stages:
   data_ingestion:
     cmd: python src/pipelines/data_ingestion_pipeline.py
     deps:
-      - src/pipelines/data_ingestion_pipeline.py
+      - src/constants/paths.py
+      - src/entity/components_config_entity.py
       - src/components/data_ingestion.py
       - data/raw
     outs:
@@ -12,7 +13,9 @@ stages:
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
     deps:
-      - src/pipelines/data_validation_pipeline.py
+      - src/constants/paths.py
+      - src/utils/helpers.py
+      - src/entity/components_config_entity.py
       - src/components/data_validation.py
       - artifacts/data_ingestion
     outs:
@@ -21,7 +24,9 @@ stages:
   data_preprocessing:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
     deps:
-      - src/pipelines/data_preprocessing_pipeline.py
+      - src/constants/paths.py
+      - src/entity/components_config_entity.py
+      - src/utils/pre_helper.py
       - src/components/data_preprocessing.py
       - artifacts/data_ingestion
       - artifacts/data_validation
