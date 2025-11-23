@@ -25,10 +25,9 @@ stages:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
     deps:
       - src/constants/paths.py
-      - src/entity/components_config_entity.py
       - src/utils/pre_helper.py
+      - src/entity/components_config_entity.py
       - src/components/data_preprocessing.py
-      - artifacts/data_ingestion
       - artifacts/data_validation
     outs:
       - artifacts/data_preprocessing
