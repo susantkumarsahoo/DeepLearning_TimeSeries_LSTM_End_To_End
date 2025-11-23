@@ -59,14 +59,9 @@ stages:
   data_preprocessing:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
     deps:
-    - path: artifacts/data_ingestion
-      hash: md5
-      md5: 9714d662dd1d0290271b70125dd6f560.dir
-      size: 4421640
-      nfiles: 6
     - path: artifacts/data_validation
       hash: md5
-      md5: 574474032ec73691e1e2e5d7006dbdf2.dir
+      md5: 8bbbb69e575d251b071fc9c9f150806e.dir
       size: 4736
       nfiles: 6
     - path: src/components/data_preprocessing.py
@@ -88,6 +83,6 @@ stages:
     outs:
     - path: artifacts/data_preprocessing
       hash: md5
-      md5: 0914eb1d2829d2fbd3976978d4c5ba36.dir
+      md5: 93034c9daf9359924b2aa5ed1e7c86ed.dir
       size: 2303106
       nfiles: 3
