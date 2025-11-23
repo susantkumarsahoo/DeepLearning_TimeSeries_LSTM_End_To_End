@@ -8,6 +8,7 @@ stages:
     outs:
       - artifacts/data_ingestion
 
+
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
     deps:

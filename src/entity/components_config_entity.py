@@ -9,15 +9,12 @@ class IngestionConfig:
         self.random_state = random_state
 
         # Root ingestion directory
-        self.ingestion_dir = os.path.join(ARTIFACTS_DIR, DATA_INGESTION_DIR)
-
-        # Timestamped run directory
-        self.timestamp_dir = os.path.join(self.ingestion_dir, TIMESTAMP)
+        self.ingestion_dir = os.path.join(ARTIFACTS_DIR, DATA_INGESTION_DIR,TIMESTAMP)
 
         # Subdirectories
-        self.raw_data_dir = os.path.join(self.timestamp_dir, DATA_INGESTION_RAW_DIR)
-        self.processed_data_dir = os.path.join(self.timestamp_dir, DATA_INGESTION_PROCESSED_DIR)
-        self.split_data_dir = os.path.join(self.timestamp_dir, DATA_INGESTION_SPLIT_DIR)
+        self.raw_data_dir = os.path.join(self.ingestion_dir, DATA_INGESTION_RAW_DIR)
+        self.processed_data_dir = os.path.join(self.ingestion_dir, DATA_INGESTION_PROCESSED_DIR)
+        self.split_data_dir = os.path.join(self.ingestion_dir, DATA_INGESTION_SPLIT_DIR)
 
         # Create directories
         os.makedirs(self.raw_data_dir, exist_ok=True)
@@ -31,15 +28,15 @@ class IngestionConfig:
         self.test_data_path = os.path.join(self.split_data_dir, DATA_INGESTION_TEST_FILE)
 
         # Metadata & schema paths (stored in ingestion root)
-        self.metadata_path = os.path.join(self.timestamp_dir, DATA_INGESTION_METADATA_FILE)
-        self.schema_path = os.path.join(self.timestamp_dir, DATA_INGESTION_SCHEMA_FILE)
+        self.metadata_path = os.path.join(self.ingestion_dir, DATA_INGESTION_METADATA_FILE)
+        self.schema_path = os.path.join(self.ingestion_dir, DATA_INGESTION_SCHEMA_FILE)
 
 import os
 
 class ValidationConfig:
     def __init__(self):
         # Base folder for data validation
-        self.validation_dir = os.path.join(ARTIFACTS_DIR, DATA_VALIDATION_DIR, TIMESTAMP)
+        self.validation_dir = os.path.join(ARTIFACTS_DIR, DATA_VALIDATION_DIR)
 
         # Auto-create directories here
         os.makedirs(self.validation_dir, exist_ok=True)
@@ -54,7 +51,7 @@ class ValidationConfig:
 
 class PreprossingConfig:
     def __init__(self):
-        self.preprocess_dir = os.path.join(ARTIFACTS_DIR, DATA_PREPROCESSING_DIR, TIMESTAMP)
+        self.preprocess_dir = os.path.join(ARTIFACTS_DIR, DATA_PREPROCESSING_DIR)
         os.makedirs(self.preprocess_dir, exist_ok=True)
         self.train_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TRAIN_FILE)
         self.test_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TEST_FILE)

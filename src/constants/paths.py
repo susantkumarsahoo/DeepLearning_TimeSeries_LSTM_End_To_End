@@ -8,7 +8,7 @@ ARTIFACTS_DIR          = os.path.join("artifacts")
 DEPLOYED_ARTIFACTS_DIR = os.path.join("deployed_artifacts")
 
 # Timestamp
-TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 # =====================================================================
