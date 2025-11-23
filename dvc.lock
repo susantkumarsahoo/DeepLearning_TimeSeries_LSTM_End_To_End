@@ -69,7 +69,7 @@ stages:
       size: 1178720
     - path: artifacts/data_validation/validation_status.json
       hash: md5
-      md5: dd916b95a351fa155d3b582f58bc9c8d
+      md5: a9c58c8e4d28b3485da4d8551e91c0a9
       size: 369
     - path: src/pipelines/data_preprocessing_pipeline.py
       hash: md5
