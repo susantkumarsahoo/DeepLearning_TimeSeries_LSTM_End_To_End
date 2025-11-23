@@ -127,3 +127,8 @@ LOGGING_REPORT_FILE = "application.log"
 # TARGET COLUMN
 # =====================================================================
 TARGET_COLUMN = "xxxxxxxxx"
+
+# =====================================================================
+# DATA PATHS
+# =====================================================================
+dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"

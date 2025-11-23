@@ -7,6 +7,7 @@ import os
 import sys
 import shutil
 from typing import Optional
+from src.constants.paths import *
 from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import IngestionConfig
@@ -38,6 +39,7 @@ class DataIngestion:
         """
         try:
             self.config = config
+            self.dataset_path = dataset_path
             logger.info("="*70)
             logger.info("DATA INGESTION INITIATED")
             logger.info("="*70)
