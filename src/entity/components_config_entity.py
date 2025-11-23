@@ -9,7 +9,7 @@ class IngestionConfig:
         self.random_state = random_state
 
         # Root ingestion directory
-        self.ingestion_dir = os.path.join(ARTIFACTS_DIR, DATA_INGESTION_DIR,TIMESTAMP)
+        self.ingestion_dir = os.path.join(ARTIFACTS_DIR, DATA_INGESTION_DIR)
 
         # Subdirectories
         self.raw_data_dir = os.path.join(self.ingestion_dir, DATA_INGESTION_RAW_DIR)
