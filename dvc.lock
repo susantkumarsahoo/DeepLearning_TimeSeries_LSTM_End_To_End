@@ -59,30 +59,28 @@ stages:
   data_preprocessing:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
     deps:
-    - path: artifacts/data_validation
+    - path: artifacts/data_ingestion/split/test.csv
       hash: md5
-      md5: 8bbbb69e575d251b071fc9c9f150806e.dir
-      size: 4736
-      nfiles: 6
-    - path: src/components/data_preprocessing.py
+      md5: ec54208ac7aa78dede415a6ba0833a97
+      size: 294720
+    - path: artifacts/data_ingestion/split/train.csv
       hash: md5
-      md5: 8cdd9860208a9cdad830a8d76561c422
-      size: 6504
-    - path: src/constants/paths.py
+      md5: 70f8cf2cb5beecb07fa2928655a05644
+      size: 1178720
+    - path: artifacts/data_validation/validation_status.json
       hash: md5
-      md5: 86119190b9d10b9a44d7849e931b444d
-      size: 5624
-    - path: src/entity/components_config_entity.py
+      md5: dd916b95a351fa155d3b582f58bc9c8d
+      size: 369
+    - path: src/pipelines/data_preprocessing_pipeline.py
       hash: md5
-      md5: cb9a4a808cb008ba1254c35e887327c6
-      size: 3070
-    - path: src/utils/pre_helper.py
-      hash: md5
-      md5: 318da8f1e78307f515a1814dcce67256
-      size: 11961
+      md5: c2f8ac9df4651b534982065cf493ec9a
+      size: 1736
     outs:
-    - path: artifacts/data_preprocessing
+    - path: artifacts/data_preprocessing/test_preprocessed.csv
       hash: md5
-      md5: 93034c9daf9359924b2aa5ed1e7c86ed.dir
-      size: 2303106
-      nfiles: 3
+      md5: 876c6a8b37ba134a1181a94de3db1e90
+      size: 459661
+    - path: artifacts/data_preprocessing/train_preprocessed.csv
+      hash: md5
+      md5: 430fd5257b1a41c51473e4cd5cf8212b
+      size: 1838172
