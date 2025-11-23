@@ -1,10 +1,51 @@
 stages:
   data_ingestion:
-    cmd: python demo.py
+    cmd: python src/pipelines/data_ingestion_pipeline.py
     deps:
-      - demo.py
+      - src/pipelines/data_ingestion_pipeline.py
+      - src/components/data_ingestion.py
+      - src/costants/paths.py
+      - data/raw
     outs:
-      - artifacts/data_preprocessing
+      # Outputs observed in the image structure under the data_ingestion timestamped folder
+      - artifacts/data_ingestion\11_24_2025_01_14_22/metadata.json
+      - artifacts/data_ingestion\11_24_2025_01_14_22/schema.json
+      - artifacts/data_ingestion\11_24_2025_01_14_22/processed/processed_data.csv
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/train.csv
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/test.csv
+
+  data_validation:
+    cmd: python src/pipelines/data_validation_pipeline.py
+    deps:
+      - src/pipelines/data_validation_pipeline.py
+      - src/data_validation.py
+      # Dependencies are the outputs from data_ingestion
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/train.csv
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/test.csv
+    outs:
+      # Outputs observed in the image structure under the data_validation timestamped folder
+      - artifacts/data_validation\11_24_2025_01_14_22/data_drift_report.json
+      - artifacts/data_validation\11_24_2025_01_14_22/data_quality_integrity_validation.json
+      - artifacts/data_validation\11_24_2025_01_14_22/schema_structure_validation.json
+      - artifacts/data_validation\11_24_2025_01_14_22/statistical_validation.json
+      - artifacts/data_validation\11_24_2025_01_14_22/time_series_validation.json
+      - artifacts/data_validation\11_24_2025_01_14_22/validation_status.json
+
+  preprocessing:
+    cmd: python src/pipelines/data_preprocessing_pipeline.py
+    deps:
+      - src/pipelines/data_preprocessing_pipeline.py
+      - src/preprocessing.py
+      # Dependencies are the validated data from the ingestion stage
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/train.csv
+      - artifacts/data_ingestion\11_24_2025_01_14_22/split/test.csv
+      # Assuming validation must pass before preprocessing can run (implicit dependency)
+      # If validation results affect preprocessing, the validation_status could also be added as a dep
+    outs:
+      # Outputs observed in the image structure under the data_preprocessing timestamped folder
+      - artifacts/data_preprocessing\11_24_2025_01_14_22/train_preprocessed.csv
+      - artifacts/data_preprocessing\11_24_2025_01_14_22/test_preprocessed.csv
+      - artifacts/data_preprocessing\11_24_2025_01_14_22/preprocessing_report.json
 
 
       
