@@ -114,7 +114,7 @@ class Preprocessing:
             decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
 
             # variance threshold
-            variance_threshold = variance_threshold_report(df, threshold=0.5, json_path=None)
+            variance_threshold = variance_threshold_report(df, threshold=0.01, json_path=None)
 
             final_report = {
                 "data_profile": data_profile,
