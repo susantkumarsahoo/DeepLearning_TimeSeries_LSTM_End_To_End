@@ -1,0 +1,109 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/pipelines/data_ingestion_pipeline.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 9e5035ef8d090657e02949c66c4750ab.dir
+      size: 2289368
+      nfiles: 4
+    - path: src/components/data_ingestion.py
+      hash: md5
+      md5: 5ab6b87116d21ce9eb863c31a39c90c3
+      size: 8933
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 86119190b9d10b9a44d7849e931b444d
+      size: 5624
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: cb9a4a808cb008ba1254c35e887327c6
+      size: 3070
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 08f102c7e1e787f92f3faa8d82ec9010
+      size: 10343
+    outs:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 9714d662dd1d0290271b70125dd6f560.dir
+      size: 4421640
+      nfiles: 6
+  data_validation:
+    cmd: python src/pipelines/data_validation_pipeline.py
+    deps:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 9714d662dd1d0290271b70125dd6f560.dir
+      size: 4421640
+      nfiles: 6
+    - path: src/components/data_validation.py
+      hash: md5
+      md5: c400b0a8f781004a1b8a40cdf7691b5c
+      size: 28032
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 86119190b9d10b9a44d7849e931b444d
+      size: 5624
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: cb9a4a808cb008ba1254c35e887327c6
+      size: 3070
+    - path: src/utils/handler.py
+      hash: md5
+      md5: 702e2757464ab2ba52a4708266208d7f
+      size: 586
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 08f102c7e1e787f92f3faa8d82ec9010
+      size: 10343
+    outs:
+    - path: artifacts/data_validation/
+      hash: md5
+      md5: c6323517d28c45905356d86bc08c17ee.dir
+      size: 4736
+      nfiles: 6
+  data_preprocessing:
+    cmd: python src/pipelines/data_preprocessing_pipeline.py
+    deps:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 9714d662dd1d0290271b70125dd6f560.dir
+      size: 4421640
+      nfiles: 6
+    - path: artifacts/data_validation/
+      hash: md5
+      md5: df8fb525f50b93921b8c2fd0328c0f19.dir
+      size: 4735
+      nfiles: 6
+    - path: src/components/data_preprocessing.py
+      hash: md5
+      md5: d30eda449fc432fa2edee6b59bfa32fe
+      size: 6722
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 86119190b9d10b9a44d7849e931b444d
+      size: 5624
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: cb9a4a808cb008ba1254c35e887327c6
+      size: 3070
+    - path: src/utils/handler.py
+      hash: md5
+      md5: 702e2757464ab2ba52a4708266208d7f
+      size: 586
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 08f102c7e1e787f92f3faa8d82ec9010
+      size: 10343
+    - path: src/utils/pre_helper.py
+      hash: md5
+      md5: 614369d912c60e73cd8d69d29ae4702b
+      size: 13521
+    outs:
+    - path: artifacts/data_preprocessing/
+      hash: md5
+      md5: acb52661049bab16541d1bfacab05597.dir
+      size: 2303807
+      nfiles: 3
