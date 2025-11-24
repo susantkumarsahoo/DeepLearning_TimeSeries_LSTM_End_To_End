@@ -131,7 +131,7 @@ class Preprocessing:
 
             # 3. Save readable text report (human-friendly)
             readable_path = save_readable_report(
-                final_report,
+                json_path,
                 self.preprocessing_config.preprocessing_report_path
             )
             logger.info(f"Readable report saved successfully at: {readable_path}")
