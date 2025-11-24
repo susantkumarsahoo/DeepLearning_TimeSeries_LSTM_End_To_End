@@ -27,7 +27,7 @@ from src.entity.components_config_entity import ValidationConfig, PreprossingCon
 from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact, PreprocessingArtifact
 from src.utils.helpers import save_json,save_json_new,save_json_data
 from src.utils.pre_helper import (generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr,
-                                  analyze_seasonal_decomposition)
+                                  analyze_seasonal_decomposition,variance_threshold_report)
 
 
 
@@ -113,11 +113,16 @@ class Preprocessing:
             # sesonal decomposition
             decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
 
+            # variance threshold
+            variance_threshold = variance_threshold_report(df, threshold=0.5, json_path=None)
+
             final_report = {
                 "data_profile": data_profile,
                 "correlation_report": correlation_report,
                 "outliers_report": outlayers_report,
-                "decomposition_report": decomposition_report
+                "decomposition_report": decomposition_report,
+                "variance_threshold": variance_threshold
+
             }
 
             # Save all reports

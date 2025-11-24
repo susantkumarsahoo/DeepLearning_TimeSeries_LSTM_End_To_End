@@ -386,3 +386,101 @@ def analyze_seasonal_decomposition(df, column_name, date_column=None, model='add
 
 
 
+import os
+import json
+from typing import Dict, Any
+import pandas as pd
+import numpy as np
+from sklearn.feature_selection import VarianceThreshold
+
+def variance_threshold_report(df_clean: pd.DataFrame, threshold: float, json_path: str):
+    """
+    Perform Variance Threshold feature selection and save report as JSON.
+    The internal logic and steps remain exactly as the user provided.
+    """
+
+    # ----- STEP 1: Select numeric features -----
+    dfnumeric = df_clean.select_dtypes(include=[np.number])
+
+    # ----- STEP 2: Variance calculation -----
+    feature_variances = dfnumeric.var()
+
+    # ----- STEP 3: Apply Variance Threshold -----
+    selector = VarianceThreshold(threshold=threshold)
+    X_selected = selector.fit_transform(dfnumeric)
+
+    selected_features = dfnumeric.columns[selector.get_support()].tolist()
+    dropped_features = [
+        col for col in dfnumeric.columns if col not in selected_features
+    ]
+
+    # ----- STEP 4: Create filtered DataFrame -----
+    df_selected = dfnumeric[selected_features]
+
+    # ----- STEP 7: Create metadata JSON -----
+    metadata = {
+        "threshold": threshold,
+        "original_shape": list(dfnumeric.shape),
+        "reduced_shape": list(df_selected.shape),
+        "selected_features": selected_features,
+        "dropped_features": dropped_features,
+        "feature_variances": feature_variances.to_dict()
+    }
+
+
+    return metadata
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

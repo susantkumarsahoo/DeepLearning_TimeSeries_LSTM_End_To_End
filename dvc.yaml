@@ -3,34 +3,39 @@ stages:
     cmd: python src/pipelines/data_ingestion_pipeline.py
     deps:
       - src/constants/paths.py
+      - src/utils/helpers.py
       - src/entity/components_config_entity.py
       - src/components/data_ingestion.py
       - data/raw
     outs:
-      - artifacts/data_ingestion
-
+      - artifacts/data_ingestion/
 
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
     deps:
       - src/constants/paths.py
       - src/utils/helpers.py
+      - src/utils/handler.py
       - src/entity/components_config_entity.py
       - src/components/data_validation.py
-      - artifacts/data_ingestion
+      - artifacts/data_ingestion/
     outs:
-      - artifacts/data_validation
+      - artifacts/data_validation/
 
   data_preprocessing:
-      cmd: python src/pipelines/data_preprocessing_pipeline.py
-      deps:
-        - src/pipelines/data_preprocessing_pipeline.py
-        - artifacts/data_ingestion/split/train.csv
-        - artifacts/data_ingestion/split/test.csv
-        - artifacts/data_validation/validation_status.json
-      outs:
-        - artifacts/data_preprocessing/train_preprocessed.csv
-        - artifacts/data_preprocessing/test_preprocessed.csv
+    cmd: python src/pipelines/data_preprocessing_pipeline.py
+    deps:
+      - src/constants/paths.py
+      - src/utils/helpers.py
+      - src/utils/handler.py
+      - src/utils/pre_helper.py
+      - src/entity/components_config_entity.py
+      - src/components/data_preprocessing.py
+      - artifacts/data_ingestion/
+      - artifacts/data_validation/
+    outs:
+      - artifacts/data_preprocessing/
+
 
 
 
