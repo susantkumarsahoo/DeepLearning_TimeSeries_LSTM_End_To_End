@@ -116,24 +116,25 @@ class Preprocessing:
             # variance threshold
             variance_threshold = variance_threshold_report(df, threshold=0.01, json_path=None)
 
+            # 1. Create final report dictionary
             final_report = {
                 "data_profile": data_profile,
                 "correlation_report": correlation_report,
                 "outliers_report": outlayers_report,
                 "decomposition_report": decomposition_report,
                 "variance_threshold": variance_threshold
-
             }
 
-            # Save all reports
+            # 2. Save JSON report (machine-friendly)
+            json_path = save_json_new(final_report)
+            logger.info(f"JSON report saved successfully at: {json_path}")
 
-            finalreport = save_json_new(final_report)
-            logger.info("All reports saved successfully.")
-
-
-            # save readable report
-            save_readable_report(finalreport, self.preprocessing_config.preprocessing_report_path)
-
+            # 3. Save readable text report (human-friendly)
+            readable_path = save_readable_report(
+                final_report,
+                self.preprocessing_config.preprocessing_report_path
+            )
+            logger.info(f"Readable report saved successfully at: {readable_path}")
             # -------------------------------------------------------
             # 4. Re-split processed dataset
             # -------------------------------------------------------
