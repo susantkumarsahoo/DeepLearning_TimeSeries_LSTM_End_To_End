@@ -432,6 +432,26 @@ def variance_threshold_report(df_clean: pd.DataFrame, threshold: float, json_pat
     return metadata
 
 
+import json
+import os
+
+def save_readable_report(final_report: dict, output_path=None):
+
+    lines = []
+
+    for section_name, section_value in final_report.items():
+        lines.append("=" * 60)
+        lines.append(section_name.upper())
+        lines.append("=" * 60)
+        lines.append(json.dumps(section_value, indent=4))
+        lines.append("\n\n")
+
+    content = "\n".join(lines)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    return output_path
 
 
 

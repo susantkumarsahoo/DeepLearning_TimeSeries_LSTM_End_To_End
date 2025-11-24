@@ -27,7 +27,7 @@ from src.entity.components_config_entity import ValidationConfig, PreprossingCon
 from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact, PreprocessingArtifact
 from src.utils.helpers import save_json,save_json_new,save_json_data
 from src.utils.pre_helper import (generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr,
-                                  analyze_seasonal_decomposition,variance_threshold_report)
+                                  analyze_seasonal_decomposition,variance_threshold_report,save_readable_report)
 
 
 
@@ -127,8 +127,12 @@ class Preprocessing:
 
             # Save all reports
 
-            save_json_new(final_report, self.preprocessing_config.preprocessing_report_path)
+            finalreport = save_json_new(final_report)
             logger.info("All reports saved successfully.")
+
+
+            # save readable report
+            save_readable_report(finalreport, self.preprocessing_config.preprocessing_report_path)
 
             # -------------------------------------------------------
             # 4. Re-split processed dataset
