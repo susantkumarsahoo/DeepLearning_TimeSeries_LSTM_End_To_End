@@ -125,16 +125,17 @@ class Preprocessing:
                 "variance_threshold": variance_threshold
             }
 
-            # 2. Save JSON report (machine-friendly)
-            json_path = save_json_new(final_report)
-            logger.info(f"JSON report saved successfully at: {json_path}")
+            # 3. Save readable text report (human-friendly)
+            readable_path = save_readable_report(final_report)
 
             # 3. Save readable text report (human-friendly)
-            readable_path = save_readable_report(
-                json_path,
+            save_json_new(
+                readable_path,
                 self.preprocessing_config.preprocessing_report_path
             )
             logger.info(f"Readable report saved successfully at: {readable_path}")
+            logger.info(f"JSON report saved successfully at: {readable_path}")
+
             # -------------------------------------------------------
             # 4. Re-split processed dataset
             # -------------------------------------------------------
