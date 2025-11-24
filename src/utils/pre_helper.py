@@ -424,7 +424,8 @@ def variance_threshold_report(df_clean: pd.DataFrame, threshold: float, json_pat
         "reduced_shape": list(df_selected.shape),
         "selected_features": selected_features,
         "dropped_features": dropped_features,
-        "feature_variances": feature_variances.to_dict()
+        "feature_variances": feature_variances.to_dict(),
+        "columns_features": list(df_clean.columns)
     }
 
 
