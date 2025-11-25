@@ -567,3 +567,59 @@ def anova_f_test_report(df_clean, target_column="megawatthours"):
     }
 
     return report
+
+import pandas as pd
+def remove_outliers_iqr(df, column, report_path=None):
+    """
+    Remove outliers from a DataFrame column using the IQR method.
+    """
+
+    # Validation
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' does not exist in the DataFrame.")
+    
+    if not pd.api.types.is_numeric_dtype(df[column]):
+        raise TypeError(f"Column '{column}' must be numeric.")
+    
+    if df[column].isnull().all():
+        raise ValueError(f"Column '{column}' contains only null values.")
+
+    # IQR Calculation
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Filter
+    df_clean = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)].copy()
+    df_clean.set_index('date', inplace=True)
+
+    df_shape = df.shape
+    df_clean_sapes = df_clean.shape
+    column_name = df_clean.columns
+
+    report = {
+        "column_name": column_name,
+        "df_shape": df_shape,
+        "df_clean_shape": df_clean_sapes,
+        "lower_bound": lower_bound,
+        "upper_bound": upper_bound,
+        "IQR": IQR,
+        "Q1": Q1,
+        "Q3": Q3
+    }
+
+
+    return df_clean, report
+
+
+
+
+
+
+
+
+
+

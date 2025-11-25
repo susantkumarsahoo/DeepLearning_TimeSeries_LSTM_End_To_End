@@ -28,7 +28,7 @@ from src.entity.artifact_entity import IngestionArtifact, ValidationArtifact, Pr
 from src.utils.helpers import save_json,save_json_new,save_json_data
 from src.utils.pre_helper import (generate_data_profile,train_test_split, add_time_features,generate_correlation_report,detect_outliers_iqr,
                                   analyze_seasonal_decomposition,variance_threshold_report,save_readable_report,multicollinearity_vif_report,
-                                  anova_f_test_report)
+                                  anova_f_test_report,remove_outliers_iqr)
 
 
 
@@ -123,6 +123,11 @@ class Preprocessing:
             # anova_f_test
             anova_f_test = anova_f_test_report(df, target_column="megawatthours")
 
+            # remove_outliers_iqr
+
+            df_clean, outliers_report = remove_outliers_iqr(df, "megawatthours")
+            
+
             # 1. Create final report dictionary
             final_report = {
                 "data_profile": data_profile,
@@ -131,9 +136,9 @@ class Preprocessing:
                 "decomposition_report": decomposition_report,
                 "variance_threshold": variance_threshold,
                 "variance_inflation": variance_inflation,
-                "anova_f_test": anova_f_test
+                "anova_f_test": anova_f_test,
+                "outliers_removed_report": outliers_report
             }
-
 
             # 3. Save readable text report (human-friendly)
             save_json_new(
@@ -146,7 +151,7 @@ class Preprocessing:
             # 4. Re-split processed dataset
             # -------------------------------------------------------
             processed_train_df, processed_test_df = train_test_split(
-                df,
+                df_clean,
                 test_size=TRAIN_TEST_SPLIT_RATIO,
                 random_state=RANDOM_STATE)
 
