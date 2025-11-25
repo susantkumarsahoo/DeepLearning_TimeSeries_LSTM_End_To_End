@@ -502,10 +502,68 @@ def multicollinearity_vif_report(df_clean, target_column='megawatthours'):
     report = {
         "vif_results": vif_data.to_dict(orient="records"),
         "high_vif_features": high_vif.to_dict(orient="records"),
-        "correlation_matrix": V.corr().round(4).to_dict(),
+        "correlation_matrix_vif": V.corr().round(4).to_dict(),
         "total_features": len(V.columns),
         "high_vif_count": len(high_vif),
         "status": "High multicollinearity detected" if len(high_vif) > 0 else "Healthy"
+    }
+
+    return report
+
+
+
+
+def anova_f_test_report(df_clean, target_column="megawatthours"):
+    """
+    Run ANOVA F-Test feature selection and return a JSON-ready report.
+    No code logic changed — only wrapped into a function.
+    """
+
+    import pandas as pd
+    import numpy as np
+    from sklearn.feature_selection import SelectKBest, f_classif
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # -------------------------------
+    # STEP 1: Load Data
+    # -------------------------------
+    anova_X = df_clean.drop(columns=[target_column], errors='ignore')
+    anova_y = df_clean[target_column]
+
+    X_numeric = anova_X.select_dtypes(include=[np.number]).dropna()
+
+    # -------------------------------
+    # STEP 2: Apply ANOVA F-Test
+    # -------------------------------
+    selector = SelectKBest(score_func=f_classif, k='all')
+    X_new = selector.fit_transform(X_numeric, anova_y)
+
+    anova_scores = selector.scores_
+    anova_pvalues = selector.pvalues_
+
+    anova_df = pd.DataFrame({
+        'Feature': X_numeric.columns,
+        'F_Score': anova_scores,
+        'P_Value': anova_pvalues
+    }).sort_values(by='F_Score', ascending=False).reset_index(drop=True)
+
+    # -------------------------------
+    # STEP 4: Filter Important Features (Optional)
+    # -------------------------------
+    significant_features = anova_df[anova_df['P_Value'] < 0.05]['Feature']
+    print("\nSignificant Features (p < 0.05):")
+    print(significant_features.tolist())
+
+    # -------------------------------
+    # STEP 5: Return JSON report
+    # -------------------------------
+    report = {
+        "anova_results": anova_df.to_dict(orient="records"),
+        "significant_features": significant_features.tolist(),
+        "total_features": len(anova_df),
+        "significant_feature_count": len(significant_features),
+        "status": "Significant features found" if len(significant_features) > 0 else "No significant features"
     }
 
     return report
