@@ -460,126 +460,52 @@ import numpy as np
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
 
-def generate_vif_report(df: pd.DataFrame, target_column: str = None) -> dict:
+def multicollinearity_vif_report(df_clean, target_column='megawatthours'):
     """
-    Generate a clean JSON-ready VIF report for multicollinearity analysis.
-
-    Args:
-        df (pd.DataFrame): Input dataframe
-        target_column (str): Column name to exclude from VIF calculation
-
-    Returns:
-        dict: JSON-serializable dictionary containing VIF results
+    Run VIF multicollinearity analysis and return a JSON-ready report.
+    No code logic changed — only wrapped into a function.
     """
 
-    df_copy = df.copy()
-    df_copy.set_index("date", inplace=True)    # ---------------------------------------------
-    # Step 1: Remove target column if provided
-    # ---------------------------------------------
-    if target_column and target_column in df_copy.columns:
-        df_copy = df_copy.drop(columns=[target_column])
+    # ----- STEP 1: Prepare Data -----
+    df_model = df_clean.copy()
 
-    # ---------------------------------------------
-    # Step 2: Select numeric columns only
-    # ---------------------------------------------
-    numeric_df = df_copy.select_dtypes(include=[np.number])
+    V = df_model.drop(columns=[target_column], errors='ignore')
+    I = df_model[target_column] if target_column in df_model.columns else None
 
-    # Drop rows with missing values
-    numeric_df = numeric_df.dropna()
+    V = V.select_dtypes(include=[np.number]).dropna()
+    V_const = add_constant(V)
 
-    if numeric_df.shape[1] < 2:
-        return {
-            "status": "error",
-            "message": "Insufficient numeric columns for VIF calculation."
-        }
+    print(f"\nFeatures selected for VIF calculation (excluding target '{target_column}'):")
+    print(list(V.columns))
 
-    # ---------------------------------------------
-    # Step 3: Add constant column
-    # ---------------------------------------------
-    X = add_constant(numeric_df)
+    # ----- STEP 2: Compute VIF -----
+    vif_data = pd.DataFrame()
+    vif_data["Feature"] = V_const.columns
+    vif_data["VIF"] = [
+        variance_inflation_factor(V_const.values, i)
+        for i in range(V_const.shape[1])
+    ]
 
-    # ---------------------------------------------
-    # Step 4: Compute VIF values
-    # ---------------------------------------------
-    vif_list = []
-    for i in range(X.shape[1]):
-        feature_name = X.columns[i]
-        vif_value = float(variance_inflation_factor(X.values, i))
+    vif_data = vif_data.sort_values(by="VIF", ascending=False).reset_index(drop=True)
+    print("\nVariance Inflation Factor (VIF) Results:\n")
+    print(vif_data)
 
-        vif_list.append({
-            "feature": feature_name,
-            "vif": vif_value,
-            "severity": (
-                "Low" if vif_value < 5 else
-                "Moderate" if 5 <= vif_value <= 10 else
-                "High"
-            )
-        })
+    # ----- STEP 4: Identify high-VIF features -----
+    high_vif = vif_data[vif_data["VIF"] > 10]
+    if not high_vif.empty:
+        print("\nHigh multicollinearity detected (VIF > 10):")
+        print(high_vif)
+    else:
+        print("\nNo critical multicollinearity detected (VIF ≤ 10).")
 
-    # Sort by VIF descending
-    vif_list = sorted(vif_list, key=lambda x: x["vif"], reverse=True)
-
-    # ---------------------------------------------
-    # Step 5: Prepare JSON report
-    # ---------------------------------------------
+    # ----- RETURN JSON REPORT -----
     report = {
-        "status": "success",
-        "total_features_analyzed": len(vif_list),
-        "high_vif_features": [
-            item for item in vif_list if item["vif"] > 10
-        ],
-        "vif_report": vif_list
+        "vif_results": vif_data.to_dict(orient="records"),
+        "high_vif_features": high_vif.to_dict(orient="records"),
+        "correlation_matrix": V.corr().round(4).to_dict(),
+        "total_features": len(V.columns),
+        "high_vif_count": len(high_vif),
+        "status": "High multicollinearity detected" if len(high_vif) > 0 else "Healthy"
     }
 
     return report
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
