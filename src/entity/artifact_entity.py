@@ -40,7 +40,7 @@ class PreprocessingArtifact:
 # FEATURE ENGINEERING ARTIFACT
 # ----------------------------------------------------------------------
 @dataclass
-class FeatureArtifact:
+class FeatureEngineeringArtifact:
     train_feature_file: str
     test_feature_file: str
     feature_report_file: str

@@ -31,8 +31,6 @@ class IngestionConfig:
         self.metadata_path = os.path.join(self.ingestion_dir, DATA_INGESTION_METADATA_FILE)
         self.schema_path = os.path.join(self.ingestion_dir, DATA_INGESTION_SCHEMA_FILE)
 
-import os
-
 class ValidationConfig:
     def __init__(self):
         # Base folder for data validation
@@ -56,6 +54,16 @@ class PreprossingConfig:
         self.train_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TRAIN_FILE)
         self.test_preprocessed_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_TEST_FILE)
         self.preprocessing_report_path = os.path.join(self.preprocess_dir, DATA_PREPROCESSING_REPORT_FILE)
+
+
+class FeatureEngineeringConfig:
+    def __init__(self):
+        self.feature_engineering_dir = os.path.join(ARTIFACTS_DIR, FEATURE_ENGINEERING_DIR)
+        os.makedirs(self.feature_engineering_dir, exist_ok=True)
+        self.feature_engineering_report_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_REPORT_FILE)
+        self.train_feature_engineering_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_TRAIN_FILE)
+        self.test_feature_engineering_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_TEST_FILE)
+
         
 
   
