@@ -4,30 +4,67 @@ from src.constants.paths import dataset_path
 from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import FeatureEngineeringConfig
 from src.components.feature_engineering import FeatureEngineering
+from src.entity.artifact_entity import (
+    DataIngestionArtifact,
+    DataValidationArtifact,
+    PreprocessingArtifact
+)
+from src.utils.common import load_json
 
 logger = get_logger(__name__)
 
 
 def run_feature_engineering_pipeline(preprocessing_artifact):
+    """
+    Execute Feature Engineering Pipeline
+    """
     try:
-        logger.info("Feature Engineering Initiated")
-        featurengineering_config = FeatureEngineeringConfig()
+        logger.info("=== FEATURE ENGINEERING STARTED ===")
+
+        feature_engineering_config = FeatureEngineeringConfig()
+
         feature_engineering = FeatureEngineering(
-            featurengineering_config=featurengineering_config,
-            preprocessing_artifact=preprocessing_artifact)
+            featurengineering_config=feature_engineering_config,
+            preprocessing_artifact=preprocessing_artifact
+        )
+
         feature_engineering_artifact = feature_engineering.initiate_feature_engineering()
-        logger.info("Feature Engineering Completed")
+
+        logger.info("=== FEATURE ENGINEERING COMPLETED ===")
         return feature_engineering_artifact
+
     except Exception as e:
         raise ProjectException(e, sys)
-    
-if __name__ == "__main__":
 
-    from src.pipelines.data_preprocessing_pipeline import run_preprocessing_pipeline
-    preprocessing_artifact = run_preprocessing_pipeline(dataset_path)
-    preprocessing_artifact = preprocessing_artifact
-    feature_engineering_artifact = run_feature_engineering_pipeline(preprocessing_artifact)
-    print(feature_engineering_artifact)
+
+if __name__ == "__main__":
+    try:
+        # Import pipelines
+        from src.pipelines.data_ingestion_pipeline import run_ingestion_pipeline
+        from src.pipelines.data_validation_pipeline import run_validation_pipeline
+        from src.pipelines.data_preprocessing_pipeline import run_preprocessing_pipeline
+
+        # 1. Run Data Ingestion
+        ingestion_artifact = run_ingestion_pipeline(dataset_path)
+
+        # 2. Run Data Validation
+        validation_artifact = run_validation_pipeline(ingestion_artifact)
+
+        # 3. Run Preprocessing (CORRECT ARGUMENTS)
+        preprocessing_artifact = run_preprocessing_pipeline(
+            ingestion_artifact,
+            validation_artifact
+        )
+
+        # 4. Run Feature Engineering
+        feature_engineering_artifact = run_feature_engineering_pipeline(preprocessing_artifact)
+
+        print(feature_engineering_artifact)
+
+    except Exception as e:
+        raise ProjectException(e, sys)
+
+
 
 
     # python src/pipelines/feature_engineering_pipeline.py

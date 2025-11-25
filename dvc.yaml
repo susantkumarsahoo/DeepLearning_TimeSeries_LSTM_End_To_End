@@ -41,9 +41,11 @@ stages:
     deps:
       - src/constants/paths.py
       - src/utils/helpers.py
-      - src/utils/feature_engineering_helper.py
+      - src/utils/features_engineering_helpers.py
       - src/entity/components_config_entity.py
       - src/components/feature_engineering.py
+      - artifacts/data_ingestion/
+      - artifacts/data_validation/
       - artifacts/data_preprocessing/
     outs:
       - artifacts/feature_engineering/
