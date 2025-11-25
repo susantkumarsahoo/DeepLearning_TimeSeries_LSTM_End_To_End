@@ -455,6 +455,85 @@ def save_readable_report(final_report: dict, output_path=None):
 
 
 
+import pandas as pd
+import numpy as np
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
+
+def generate_vif_report(df: pd.DataFrame, target_column: str = None) -> dict:
+    """
+    Generate a clean JSON-ready VIF report for multicollinearity analysis.
+
+    Args:
+        df (pd.DataFrame): Input dataframe
+        target_column (str): Column name to exclude from VIF calculation
+
+    Returns:
+        dict: JSON-serializable dictionary containing VIF results
+    """
+
+    df_copy = df.copy()
+
+    # ---------------------------------------------
+    # Step 1: Remove target column if provided
+    # ---------------------------------------------
+    if target_column and target_column in df_copy.columns:
+        df_copy = df_copy.drop(columns=[target_column])
+
+    # ---------------------------------------------
+    # Step 2: Select numeric columns only
+    # ---------------------------------------------
+    numeric_df = df_copy.select_dtypes(include=[np.number])
+
+    # Drop rows with missing values
+    numeric_df = numeric_df.dropna()
+
+    if numeric_df.shape[1] < 2:
+        return {
+            "status": "error",
+            "message": "Insufficient numeric columns for VIF calculation."
+        }
+
+    # ---------------------------------------------
+    # Step 3: Add constant column
+    # ---------------------------------------------
+    X = add_constant(numeric_df)
+
+    # ---------------------------------------------
+    # Step 4: Compute VIF values
+    # ---------------------------------------------
+    vif_list = []
+    for i in range(X.shape[1]):
+        feature_name = X.columns[i]
+        vif_value = float(variance_inflation_factor(X.values, i))
+
+        vif_list.append({
+            "feature": feature_name,
+            "vif": vif_value,
+            "severity": (
+                "Low" if vif_value < 5 else
+                "Moderate" if 5 <= vif_value <= 10 else
+                "High"
+            )
+        })
+
+    # Sort by VIF descending
+    vif_list = sorted(vif_list, key=lambda x: x["vif"], reverse=True)
+
+    # ---------------------------------------------
+    # Step 5: Prepare JSON report
+    # ---------------------------------------------
+    report = {
+        "status": "success",
+        "total_features_analyzed": len(vif_list),
+        "high_vif_features": [
+            item for item in vif_list if item["vif"] > 10
+        ],
+        "vif_report": vif_list
+    }
+
+    return report
+
 
 
 
