@@ -473,8 +473,7 @@ def generate_vif_report(df: pd.DataFrame, target_column: str = None) -> dict:
     """
 
     df_copy = df.copy()
-
-    # ---------------------------------------------
+    df_copy.set_index("date", inplace=True)    # ---------------------------------------------
     # Step 1: Remove target column if provided
     # ---------------------------------------------
     if target_column and target_column in df_copy.columns:
