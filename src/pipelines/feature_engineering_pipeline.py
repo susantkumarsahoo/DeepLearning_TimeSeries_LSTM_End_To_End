@@ -15,7 +15,7 @@ from src.entity.artifact_entity import (
 logger = get_logger(__name__)
 
 
-def run_feature_engineering_pipeline(preprocessing_artifact: PreprocessingArtifact):
+def run_feature_engineering_pipeline(preprocessing_artifact):
     """
     Execute Feature Engineering Pipeline
     """
@@ -45,17 +45,16 @@ if __name__ == "__main__":
         from src.pipelines.data_validation_pipeline import run_validation_pipeline
         from src.pipelines.data_preprocessing_pipeline import run_preprocessing_pipeline
 
+        dataset_path = dataset_path
+
         # 1. Run Data Ingestion
-        ingestion_artifact: IngestionArtifact = run_ingestion_pipeline(dataset_path)
+        ingestion_artifact = run_ingestion_pipeline(dataset_path)
 
         # 2. Run Data Validation
-        validation_artifact: ValidationArtifact = run_validation_pipeline(ingestion_artifact)
+        validation_artifact = run_validation_pipeline(ingestion_artifact)
 
         # 3. Run Preprocessing
-        preprocessing_artifact: PreprocessingArtifact = run_preprocessing_pipeline(
-            ingestion_artifact=ingestion_artifact,
-            validation_artifact=validation_artifact
-        )
+        preprocessing_artifact = run_preprocessing_pipeline(ingestion_artifact,validation_artifact)
 
         # 4. Run Feature Engineering
         feature_engineering_artifact = run_feature_engineering_pipeline(preprocessing_artifact)
