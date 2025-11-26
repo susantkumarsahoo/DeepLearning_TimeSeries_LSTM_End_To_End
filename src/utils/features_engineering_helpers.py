@@ -46,7 +46,8 @@ def add_cyclic_features(df, report=None):
         "total_columns_before": df.shape[1],
         "total_columns_after": cyclic_df.shape[1],
         "features_added": added_features,
-        "added_feature_count": len(added_features)
+        "added_feature_count": len(added_features),
+        'columns_names': list(cyclic_df.columns)
     }
 
     return cyclic_df, report
