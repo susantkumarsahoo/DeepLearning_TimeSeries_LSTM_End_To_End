@@ -5,11 +5,10 @@ from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import FeatureEngineeringConfig
 from src.components.feature_engineering import FeatureEngineering
 from src.entity.artifact_entity import (
-    DataIngestionArtifact,
-    DataValidationArtifact,
+    IngestionArtifact,
+    ValidationArtifact,
     PreprocessingArtifact
 )
-from src.utils.common import load_json
 
 logger = get_logger(__name__)
 
@@ -21,10 +20,10 @@ def run_feature_engineering_pipeline(preprocessing_artifact):
     try:
         logger.info("=== FEATURE ENGINEERING STARTED ===")
 
-        feature_engineering_config = FeatureEngineeringConfig()
+        featureengineering_config = FeatureEngineeringConfig()
 
         feature_engineering = FeatureEngineering(
-            featurengineering_config=feature_engineering_config,
+            featurengineering_config=featureengineering_config,
             preprocessing_artifact=preprocessing_artifact
         )
 
