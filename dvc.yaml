@@ -31,7 +31,6 @@ stages:
       - src/utils/pre_helper.py
       - src/entity/components_config_entity.py
       - src/components/data_preprocessing.py
-      - logs
       - artifacts/data_ingestion/
       - artifacts/data_validation/
     outs:
