@@ -2,8 +2,10 @@ import sys
 from src.logging.logger import get_logger
 from src.constants.paths import dataset_path
 from src.exceptions.exception import ProjectException
+
 from src.entity.components_config_entity import FeatureEngineeringConfig
 from src.components.feature_engineering import FeatureEngineering
+
 from src.entity.artifact_entity import (
     IngestionArtifact,
     ValidationArtifact,
@@ -13,17 +15,17 @@ from src.entity.artifact_entity import (
 logger = get_logger(__name__)
 
 
-def run_feature_engineering_pipeline(preprocessing_artifact):
+def run_feature_engineering_pipeline(preprocessing_artifact: PreprocessingArtifact):
     """
     Execute Feature Engineering Pipeline
     """
     try:
         logger.info("=== FEATURE ENGINEERING STARTED ===")
 
-        featureengineering_config = FeatureEngineeringConfig()
+        feature_engineering_config = FeatureEngineeringConfig()
 
         feature_engineering = FeatureEngineering(
-            featurengineering_config=featureengineering_config,
+            feature_engineering_config=feature_engineering_config,
             preprocessing_artifact=preprocessing_artifact
         )
 
@@ -44,15 +46,15 @@ if __name__ == "__main__":
         from src.pipelines.data_preprocessing_pipeline import run_preprocessing_pipeline
 
         # 1. Run Data Ingestion
-        ingestion_artifact = run_ingestion_pipeline(dataset_path)
+        ingestion_artifact: IngestionArtifact = run_ingestion_pipeline(dataset_path)
 
         # 2. Run Data Validation
-        validation_artifact = run_validation_pipeline(ingestion_artifact)
+        validation_artifact: ValidationArtifact = run_validation_pipeline(ingestion_artifact)
 
-        # 3. Run Preprocessing (CORRECT ARGUMENTS)
-        preprocessing_artifact = run_preprocessing_pipeline(
-            ingestion_artifact,
-            validation_artifact
+        # 3. Run Preprocessing
+        preprocessing_artifact: PreprocessingArtifact = run_preprocessing_pipeline(
+            ingestion_artifact=ingestion_artifact,
+            validation_artifact=validation_artifact
         )
 
         # 4. Run Feature Engineering
@@ -62,6 +64,7 @@ if __name__ == "__main__":
 
     except Exception as e:
         raise ProjectException(e, sys)
+
 
 
 

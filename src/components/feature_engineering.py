@@ -29,7 +29,7 @@ logger = get_logger(__name__)
 
 
 class FeatureEngineering:
-    def __init__(self, feature_engineering_config: FeatureEngineeringConfig, preprocessing_artifact: PreprocessingArtifact):
+    def __init__(self, feature_engineering_config: FeatureEngineeringConfig, preprocessing_artifact: PreprocessingArtifact) -> None:
         try:
             self.feature_engineering_config = feature_engineering_config
             self.preprocessing_artifact = preprocessing_artifact

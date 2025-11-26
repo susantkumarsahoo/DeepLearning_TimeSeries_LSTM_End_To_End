@@ -58,12 +58,24 @@ class PreprossingConfig:
 
 class FeatureEngineeringConfig:
     def __init__(self):
-        self.feature_engineering_dir = os.path.join(ARTIFACTS_DIR, FEATURE_ENGINEERING_DIR)
+        # Main directory for feature engineering artifacts
+        self.feature_engineering_dir = os.path.join(
+            ARTIFACTS_DIR, FEATURE_ENGINEERING_DIR
+        )
         os.makedirs(self.feature_engineering_dir, exist_ok=True)
-        self.feature_engineering_report_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_REPORT_FILE)
-        self.train_feature_engineering_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_TRAIN_FILE)
-        self.test_feature_engineering_path = os.path.join(self.feature_engineering_dir, FEATURE_ENGINEERING_TEST_FILE)
 
+        # Report file path
+        self.feature_engineering_report_path = os.path.join(
+            self.feature_engineering_dir, FEATURE_ENGINEERING_REPORT_FILE
+        )
+
+        # Train & Test feature-engineered output paths
+        self.train_feature_engineering_path = os.path.join(
+            self.feature_engineering_dir, FEATURE_ENGINEERING_TRAIN_FILE
+        )
+        self.test_feature_engineering_path = os.path.join(
+            self.feature_engineering_dir, FEATURE_ENGINEERING_TEST_FILE
+        )
         
 
   
