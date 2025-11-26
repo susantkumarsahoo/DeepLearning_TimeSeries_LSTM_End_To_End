@@ -31,12 +31,12 @@ stages:
       - src/utils/pre_helper.py
       - src/entity/components_config_entity.py
       - src/components/data_preprocessing.py
+      - logs
       - artifacts/data_ingestion/
       - artifacts/data_validation/
     outs:
       - artifacts/data_preprocessing/
       
-
 
   feature_engineering:
     cmd: python src/pipelines/feature_engineering_pipeline.py
