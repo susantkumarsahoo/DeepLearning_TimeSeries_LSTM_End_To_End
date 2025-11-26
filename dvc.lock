@@ -74,7 +74,7 @@ stages:
       nfiles: 6
     - path: artifacts/data_validation/
       hash: md5
-      md5: 5d92b60efe2bf98605c3860eecbfe0bc.dir
+      md5: 5729aceb1550fadf027f0a1b19b98710.dir
       size: 4736
       nfiles: 6
     - path: src/components/data_preprocessing.py
@@ -104,6 +104,50 @@ stages:
     outs:
     - path: artifacts/data_preprocessing/
       hash: md5
-      md5: 0397b6632d2c6b6278d8b5c5b09383d3.dir
+      md5: 9f8c2cc460a272cfa4075bab501e63f6.dir
       size: 1084625
+      nfiles: 3
+  feature_engineering:
+    cmd: python src/pipelines/feature_engineering_pipeline.py
+    deps:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 9714d662dd1d0290271b70125dd6f560.dir
+      size: 4421640
+      nfiles: 6
+    - path: artifacts/data_preprocessing/
+      hash: md5
+      md5: a177d46a8d299912c51495b09148aeb1.dir
+      size: 1084625
+      nfiles: 3
+    - path: artifacts/data_validation/
+      hash: md5
+      md5: c38b25cc419fc23911109c1296c3a011.dir
+      size: 4736
+      nfiles: 6
+    - path: src/components/feature_engineering.py
+      hash: md5
+      md5: 9b245e605f279f54d591711a2a6cc9d3
+      size: 2890
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 6bbea7a884d716b6ff5a20d77e5df57c
+      size: 5628
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: 0be3c54ab1047a4bcc270fb022c7fa7a
+      size: 3888
+    - path: src/utils/features_engineering_helpers.py
+      hash: md5
+      md5: c6059b3914a34f9c56713203a2cbea11
+      size: 1965
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 08f102c7e1e787f92f3faa8d82ec9010
+      size: 10343
+    outs:
+    - path: artifacts/feature_engineering/
+      hash: md5
+      md5: 8c7b505618d00e30aee8db6782cc7eb9.dir
+      size: 15201806
       nfiles: 3
