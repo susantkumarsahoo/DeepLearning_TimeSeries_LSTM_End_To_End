@@ -92,17 +92,17 @@ class Preprocessing:
             # -------------------------------------------------------
             # 3. Generate data profile JSON
             # -------------------------------------------------------
-            data_profile = generate_data_profile(df)
+            #data_profile = generate_data_profile(df)
 
             logger.info("Data profile JSON saved successfully.")
 
             # Add time features
-            df = add_time_features(df)
+            #df = add_time_features(df)
 
             logger.info("Time features added successfully.")
 
             # Generate correlation report
-            correlation_report = generate_correlation_report(df)
+            #correlation_report = generate_correlation_report(df)
 
             logger.info("Correlation report saved successfully.")
 
@@ -115,13 +115,13 @@ class Preprocessing:
             #decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
 
             # variance threshold
-            variance_threshold = variance_threshold_report(df, threshold=0.01, json_path=None)
+            #variance_threshold = variance_threshold_report(df, threshold=0.01, json_path=None)
 
             # variance_inflation_factor
-            variance_inflation = multicollinearity_vif_report(df, target_column="megawatthours")
+            #variance_inflation = multicollinearity_vif_report(df, target_column="megawatthours")
 
             # anova_f_test
-            anova_f_test = anova_f_test_report(df, target_column="megawatthours")
+            #anova_f_test = anova_f_test_report(df, target_column="megawatthours")
 
             # remove_outliers_iqr
 
@@ -130,13 +130,13 @@ class Preprocessing:
 
             # 1. Create final report dictionary
             final_report = {
-                "data_profile": data_profile,
-                "correlation_report": correlation_report,
+                #"data_profile": data_profile,
+                #"correlation_report": correlation_report,
                 "outliers_report": outlayers_report,
                 #"decomposition_report": decomposition_report,
-                "variance_threshold": variance_threshold,
-                "variance_inflation": variance_inflation,
-                "anova_f_test": anova_f_test,
+                #"variance_threshold": variance_threshold,
+                #"variance_inflation": variance_inflation,
+                #"anova_f_test": anova_f_test,
                 "outliers_removed_report": outliers_report
             }
 
