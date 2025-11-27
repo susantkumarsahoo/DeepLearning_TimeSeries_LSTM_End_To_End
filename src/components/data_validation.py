@@ -81,7 +81,7 @@ class DataValidation:
             logger.info("Starting schema and structure validation")
             
             validation_report = {
-                #"timestamp": datetime.now().isoformat(),
+                "timestamp": datetime.now().isoformat(),
                 "train_shape": train_df.shape,
                 "val_shape": test_df.shape,
                 "schema_match": True,
@@ -614,7 +614,7 @@ class DataValidation:
             
             # Generate overall validation status
             validation_status = {
-                "timestamp": datetime.now().isoformat(),
+                #"timestamp": datetime.now().isoformat(),
                 "validation_passed": True,
                 "summary": {
                     "schema_match": schema_report["schema_match"],
