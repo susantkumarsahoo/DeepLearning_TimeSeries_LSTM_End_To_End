@@ -33,6 +33,7 @@ def run_preprocessing_pipeline(data_ingestion_artifact, data_validation_artifact
 
 
 if __name__ == "__main__":
+    
     from src.pipelines.data_ingestion_pipeline import run_ingestion_pipeline
     from src.pipelines.data_validation_pipeline import run_validation_pipeline
 
