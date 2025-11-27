@@ -74,8 +74,8 @@ stages:
       nfiles: 6
     - path: artifacts/data_validation/
       hash: md5
-      md5: 7851d48d9747160950ccab571890ada8.dir
-      size: 4735
+      md5: 1310967de1954608b4e32777484865e1.dir
+      size: 4736
       nfiles: 6
     - path: src/components/data_preprocessing.py
       hash: md5
