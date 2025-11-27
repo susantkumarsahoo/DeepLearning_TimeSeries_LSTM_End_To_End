@@ -475,8 +475,8 @@ def multicollinearity_vif_report(df_clean, target_column='megawatthours'):
     V = V.select_dtypes(include=[np.number]).dropna()
     V_const = add_constant(V)
 
-    print(f"\nFeatures selected for VIF calculation (excluding target '{target_column}'):")
-    print(list(V.columns))
+    #print(f"\nFeatures selected for VIF calculation (excluding target '{target_column}'):")
+    #print(list(V.columns))
 
     # ----- STEP 2: Compute VIF -----
     vif_data = pd.DataFrame()
@@ -487,16 +487,16 @@ def multicollinearity_vif_report(df_clean, target_column='megawatthours'):
     ]
 
     vif_data = vif_data.sort_values(by="VIF", ascending=False).reset_index(drop=True)
-    print("\nVariance Inflation Factor (VIF) Results:\n")
-    print(vif_data)
+    #print("\nVariance Inflation Factor (VIF) Results:\n")
+    #print(vif_data)
 
     # ----- STEP 4: Identify high-VIF features -----
     high_vif = vif_data[vif_data["VIF"] > 10]
-    if not high_vif.empty:
-        print("\nHigh multicollinearity detected (VIF > 10):")
-        print(high_vif)
-    else:
-        print("\nNo critical multicollinearity detected (VIF ≤ 10).")
+    #if not high_vif.empty:
+        #print("\nHigh multicollinearity detected (VIF > 10):")
+        #print(high_vif)
+    #else:
+        #print("\nNo critical multicollinearity detected (VIF ≤ 10).")
 
     # ----- RETURN JSON REPORT -----
     report = {
@@ -552,8 +552,8 @@ def anova_f_test_report(df_clean, target_column="megawatthours"):
     # STEP 4: Filter Important Features (Optional)
     # -------------------------------
     significant_features = anova_df[anova_df['P_Value'] < 0.05]['Feature']
-    print("\nSignificant Features (p < 0.05):")
-    print(significant_features.tolist())
+    #print("\nSignificant Features (p < 0.05):")
+    #print(significant_features.tolist())
 
     # -------------------------------
     # STEP 5: Return JSON report
