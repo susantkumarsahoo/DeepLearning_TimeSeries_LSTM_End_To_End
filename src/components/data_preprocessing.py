@@ -112,7 +112,7 @@ class Preprocessing:
             logger.info("Outliers detected successfully.")
 
             # sesonal decomposition
-            decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
+            #decomposition_report = analyze_seasonal_decomposition(df,column_name='megawatthours' , model='additive', period=12)
 
             # variance threshold
             variance_threshold = variance_threshold_report(df, threshold=0.01, json_path=None)
@@ -133,7 +133,7 @@ class Preprocessing:
                 "data_profile": data_profile,
                 "correlation_report": correlation_report,
                 "outliers_report": outlayers_report,
-                "decomposition_report": decomposition_report,
+                #"decomposition_report": decomposition_report,
                 "variance_threshold": variance_threshold,
                 "variance_inflation": variance_inflation,
                 "anova_f_test": anova_f_test,
