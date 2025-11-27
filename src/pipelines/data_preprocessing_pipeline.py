@@ -33,16 +33,16 @@ def run_preprocessing_pipeline(data_ingestion_artifact, data_validation_artifact
 
 
 if __name__ == "__main__":
-    
+
     from src.pipelines.data_ingestion_pipeline import run_ingestion_pipeline
     from src.pipelines.data_validation_pipeline import run_validation_pipeline
 
     dataset_path = dataset_path
 
-    ingestion_artifact = run_ingestion_pipeline(dataset_path)
-    validation_artifact = run_validation_pipeline(ingestion_artifact)
+    ingestionartifact = run_ingestion_pipeline(dataset_path)
+    validation_artifact = run_validation_pipeline(ingestionartifact)
 
-    preprocessing_artifact = run_preprocessing_pipeline(ingestion_artifact, validation_artifact)
+    preprocessing_artifact = run_preprocessing_pipeline(ingestionartifact, validation_artifact)
     print(preprocessing_artifact)
 
 
