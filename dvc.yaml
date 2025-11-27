@@ -6,9 +6,13 @@ stages:
       - src/utils/helpers.py
       - src/entity/components_config_entity.py
       - src/components/data_ingestion.py
-      - data/raw
+      - data/raw/Energy Demand Hourly.csv
     outs:
-      - artifacts/data_ingestion/
+      - artifacts/data_ingestion/processed/processed_data.csv
+      - artifacts/data_ingestion/split/train.csv
+      - artifacts/data_ingestion/split/test.csv
+      - artifacts/data_ingestion/metadata.json
+      - artifacts/data_ingestion/schema.json
 
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
@@ -18,9 +22,17 @@ stages:
       - src/utils/handler.py
       - src/entity/components_config_entity.py
       - src/components/data_validation.py
-      - artifacts/data_ingestion/
+      - artifacts/data_ingestion/processed/processed_data.csv
+      - artifacts/data_ingestion/split/train.csv
+      - artifacts/data_ingestion/split/test.csv
+      - artifacts/data_ingestion/schema.json
     outs:
-      - artifacts/data_validation/
+      # Only include STABLE validation result
+      - artifacts/data_validation/validation_status.json
+
+      # Do NOT track dynamic reports (they change every run)
+      # Store them OUTSIDE DVC tracking
+      # Example: reports/data_validation/*.json (not in DVC)
 
   data_preprocessing:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
@@ -31,11 +43,13 @@ stages:
       - src/utils/pre_helper.py
       - src/entity/components_config_entity.py
       - src/components/data_preprocessing.py
-      - artifacts/data_ingestion/
-      - artifacts/data_validation/
+      - artifacts/data_ingestion/split/train.csv
+      - artifacts/data_ingestion/split/test.csv
+      - artifacts/data_validation/validation_status.json
     outs:
-      - artifacts/data_preprocessing/
-
+      - artifacts/data_preprocessing/train_preprocessed.csv
+      - artifacts/data_preprocessing/test_preprocessed.csv
+      - artifacts/data_preprocessing/preprocessing_report.json
 
   feature_engineering:
     cmd: python src/pipelines/feature_engineering_pipeline.py
@@ -45,9 +59,13 @@ stages:
       - src/utils/features_engineering_helpers.py
       - src/entity/components_config_entity.py
       - src/components/feature_engineering.py
-      - artifacts/data_preprocessing/
+      - artifacts/data_preprocessing/train_preprocessed.csv
+      - artifacts/data_preprocessing/test_preprocessed.csv
     outs:
-      - artifacts/feature_engineering/
+      - artifacts/feature_engineering/test_features.csv
+      - artifacts/feature_engineering/train_features.csv
+
+
 
 
 
