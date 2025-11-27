@@ -74,8 +74,8 @@ stages:
       nfiles: 6
     - path: artifacts/data_validation/
       hash: md5
-      md5: d9b2c35cae712aa0a85c12cc9dc81f41.dir
-      size: 4736
+      md5: c1b5e5991294f16ed9980e47bc38856a.dir
+      size: 4735
       nfiles: 6
     - path: src/components/data_preprocessing.py
       hash: md5
@@ -102,10 +102,18 @@ stages:
       md5: d4c79274e223a162a22e63cec9ab417d
       size: 19302
     outs:
+    - path: artifacts/data_preprocessing/preprocessing_report.json
+      hash: md5
+      md5: f330acedb3f7cfd33ab37d677e2ac4ec
+      size: 9323
     - path: artifacts/data_preprocessing/test_preprocessed.csv
       hash: md5
       md5: 06c7f01711afaa58c9562e80c89f295e
       size: 215068
+    - path: artifacts/data_preprocessing/train_preprocessed.csv
+      hash: md5
+      md5: 4d0e374e3a4a718904f2b765ef8fbed5
+      size: 860227
   feature_engineering:
     cmd: python src/pipelines/feature_engineering_pipeline.py
     deps:
