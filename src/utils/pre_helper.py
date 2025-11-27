@@ -327,7 +327,7 @@ def analyze_seasonal_decomposition(df, column_name, date_column=None, model='add
     # Calculate statistics
     report = {
         "metadata": {
-            "analysis_date": datetime.now().isoformat(),
+            "analysis_date": ts.index.min().isoformat(),
             "column_analyzed": column_name,
             "model_type": model,
             "period": period,

@@ -35,7 +35,6 @@ stages:
       - artifacts/data_validation/
     outs:
       - artifacts/data_preprocessing/
-      
 
   feature_engineering:
     cmd: python src/pipelines/feature_engineering_pipeline.py
@@ -48,6 +47,7 @@ stages:
       - artifacts/data_preprocessing/
     outs:
       - artifacts/feature_engineering/
+
 
 
 
