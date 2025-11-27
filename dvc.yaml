@@ -49,7 +49,6 @@ stages:
     outs:
       - artifacts/data_preprocessing/train_preprocessed.csv
       - artifacts/data_preprocessing/test_preprocessed.csv
-      - artifacts/data_preprocessing/preprocessing_report.json
 
   feature_engineering:
     cmd: python src/pipelines/feature_engineering_pipeline.py
