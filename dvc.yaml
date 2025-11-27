@@ -20,6 +20,7 @@ stages:
       - src/entity/components_config_entity.py
       - src/components/data_validation.py
       - artifacts/data_ingestion/
+      - logs/
     outs:
       - artifacts/data_validation/
 
@@ -34,6 +35,7 @@ stages:
       - src/components/data_preprocessing.py
       - artifacts/data_ingestion/
       - artifacts/data_validation/
+      - logs/
     outs:
       - artifacts/data_preprocessing/
       
@@ -47,6 +49,7 @@ stages:
       - src/entity/components_config_entity.py
       - src/components/feature_engineering.py
       - artifacts/data_preprocessing/
+      - logs/
     outs:
       - artifacts/feature_engineering/
 
