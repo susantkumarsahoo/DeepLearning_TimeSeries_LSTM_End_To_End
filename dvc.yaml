@@ -34,9 +34,7 @@ stages:
       - artifacts/data_ingestion/
       - artifacts/data_validation/
     outs:
-      - artifacts/data_preprocessing/test_preprocessed.csv
-      - artifacts/data_preprocessing/train_preprocessed.csv
-      - artifacts/data_preprocessing/preprocessing_report.json
+      - artifacts/data_preprocessing/
 
 
   feature_engineering:
