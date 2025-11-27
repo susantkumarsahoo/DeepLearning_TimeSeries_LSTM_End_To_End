@@ -7,6 +7,7 @@ stages:
       - src/entity/components_config_entity.py
       - src/components/data_ingestion.py
       - data/raw
+      - logs/
     outs:
       - artifacts/data_ingestion/
 

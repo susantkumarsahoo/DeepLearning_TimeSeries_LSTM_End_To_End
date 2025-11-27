@@ -8,6 +8,11 @@ stages:
       md5: 9e5035ef8d090657e02949c66c4750ab.dir
       size: 2289368
       nfiles: 4
+    - path: logs/
+      hash: md5
+      md5: 8e7abfa9c81452c63788fba75ba5babc.dir
+      size: 25585
+      nfiles: 19
     - path: src/components/data_ingestion.py
       hash: md5
       md5: 5ab6b87116d21ce9eb863c31a39c90c3
@@ -74,8 +79,8 @@ stages:
       nfiles: 6
     - path: artifacts/data_validation/
       hash: md5
-      md5: a9ce813f313d225fce5657244c85d658.dir
-      size: 4734
+      md5: af250db8b43da94445197b640012273f.dir
+      size: 4736
       nfiles: 6
     - path: src/components/data_preprocessing.py
       hash: md5
@@ -104,7 +109,7 @@ stages:
     outs:
     - path: artifacts/data_preprocessing/
       hash: md5
-      md5: f904d0e7484b3c7f1ef975eb4fba62f3.dir
+      md5: 848f88d09fa07824c3c81a5f80157d5d.dir
       size: 1084625
       nfiles: 3
   feature_engineering:
@@ -112,7 +117,7 @@ stages:
     deps:
     - path: artifacts/data_preprocessing/
       hash: md5
-      md5: 06bec587a08f99b96968d971cafb0c13.dir
+      md5: f48817ae48abd204c60c2f7a3fa0db24.dir
       size: 1084625
       nfiles: 3
     - path: src/components/feature_engineering.py

@@ -41,8 +41,8 @@ def get_logger(logger_name: str,
     # ----------------------------------------------------------------
     # Create timestamped log file
     # ----------------------------------------------------------------
-    timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-    log_file_path = os.path.join(log_dir, f"{logger_name}_{timestamp}.log")
+    # timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    log_file_path = os.path.join(log_dir, f"{logger_name}.log")
 
     # ----------------------------------------------------------------
     # Set logger level
