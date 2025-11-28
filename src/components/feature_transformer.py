@@ -19,7 +19,7 @@ from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import TransformationConfig
 from src.entity.artifact_entity import FeatureEngineeringArtifact, TransformationArtifact
 from src.utils.helpers import save_json
-from src.utils.feature_transformer_helper import drop_time_features
+from src.utils.feature_transformer_helper import clean_features
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 
@@ -47,23 +47,21 @@ class FeatureTransformer:
             test_df = pd.read_csv(self.feature_engineering_artifact.test_feature_file)
 
             # drop time features
-            train_df, train_report = drop_time_features(train_df)
-
-            test_df, test_report = drop_time_features(test_df)
-
+            train_clean, test_clean, info_report = clean_features(train_df, test_df, cols_to_drop)
 
             # save data
-            train_df.to_csv(self.transformation_config.train_transformation_path, index=False)
-            test_df.to_csv(self.transformation_config.test_transformation_path, index=False)
+            train_clean.to_csv(self.transformation_config.train_transformation_path, index=False)
+            test_clean.to_csv(self.transformation_config.test_transformation_path, index=False)
 
             # save report
             
-            save_json(train_report,test_report, self.transformation_config.transformation_report_path)
+            save_json(info_report, self.transformation_config.transformation_report_path)
 
             # save artifact
             transformation_artifact = TransformationArtifact(
                 train_transformed_file=self.transformation_config.train_transformation_path,
                 test_transformed_file=self.transformation_config.test_transformation_path,
+                transformation_report_file=self.transformation_config.transformation_report_path
             )
 
             logger.info("Feature Transformation Completed")

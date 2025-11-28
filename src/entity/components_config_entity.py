@@ -98,7 +98,7 @@ class TransformationConfig:
             self.transformation_dir, DATA_TRANSFORMATION_TEST_FILE
         )
 
-        self.pkl_transformation_path = os.path.join(
-            self.transformation_dir, DATA_TRANSFORMATION_PKL_FILE
-        )
+#        self.pkl_transformation_path = os.path.join(
+#            self.transformation_dir, DATA_TRANSFORMATION_PKL_FILE
+#        )
   

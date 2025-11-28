@@ -77,7 +77,7 @@ FEATURE_ENGINEERING_REPORT_FILE    = "feature_engineering_report.json"
 DATA_TRANSFORMATION_DIR          = "data_transformation"
 DATA_TRANSFORMATION_TRAIN_FILE       = "train_features.csv"
 DATA_TRANSFORMATION_TEST_FILE       = "test_features.csv"
-DATA_TRANSFORMATION_PKL_FILE  = "preprocessor.pkl"
+#DATA_TRANSFORMATION_PKL_FILE  = "preprocessor.pkl"
 DATA_TRANSFORMATION_REPORT_FILE  = "transformation_report.json"
 
 
@@ -132,3 +132,4 @@ TARGET_COLUMN = "megawatthours"
 # DATA PATHS
 # =====================================================================
 dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
+cols_to_drop = ["hour", "day_of_week", "day_of_month", "day_of_year"]

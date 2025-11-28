@@ -1,48 +1,55 @@
 import json
-import os
+from typing import List, Tuple
 import pandas as pd
 
-def drop_time_features(df: pd.DataFrame, output_json_path: str):
+
+def clean_features(
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    drop_cols: List[str],
+) -> Tuple[pd.DataFrame, pd.DataFrame, dict]:
     """
-    Drops predefined time-related columns and saves a deterministic (DVC-safe) JSON report.
+    Removes specified columns from train and test datasets and 
+    generates a structured report summarizing the changes.
 
     Parameters
     ----------
-    df : pd.DataFrame
-        Input DataFrame.
-    output_json_path : str
-        Destination path for the cleaning report.
+    train_df : pd.DataFrame
+        Training dataset.
+    test_df : pd.DataFrame
+        Testing dataset.
+    drop_cols : List[str]
+        Columns to be removed from both datasets.
 
     Returns
     -------
-    tuple: (clean_df, report_dict)
+    Tuple[pd.DataFrame, pd.DataFrame, dict]
+        Cleaned training DataFrame, cleaned testing DataFrame, 
+        and a metadata report dictionary.
     """
+    # cols_to_drop = ["hour", "day_of_week", "day_of_month", "day_of_year"]
 
-    cols_to_drop = [
-        "hour",
-        "day_of_week",
-        "day_of_month",
-        "day_of_year"
-    ]
-
-    initial_shape = df.shape
-    initial_columns = list(df.columns)
-
-    # Detect columns that exist
-    existing_cols = [c for c in cols_to_drop if c in df.columns]
-
-    # Drop columns
-    df_clean = df.drop(columns=existing_cols, errors='ignore')
-
-    # Build deterministic report (NO TIMESTAMP)
+    # Initial metadata
     report = {
-        "initial_shape": initial_shape,
-        "initial_columns": initial_columns,
-        "columns_targeted": cols_to_drop,
-        "columns_removed": existing_cols,
-        "final_shape": df_clean.shape,
-        "final_columns": list(df_clean.columns),
+        "train_before_shape": train_df.shape,
+        "test_before_shape": test_df.shape,
+        "columns_removed": [],
+        "columns_remaining": []
     }
 
-    return df_clean, report
+    # Columns that actually exist
+    existing_cols = [col for col in drop_cols if col in train_df.columns]
+    report["columns_removed"] = existing_cols
+
+    # Drop columns
+    clean_train = train_df.drop(columns=existing_cols, errors="ignore")
+    clean_test = test_df.drop(columns=existing_cols, errors="ignore")
+
+    # Post-drop metadata
+    report["train_after_shape"] = clean_train.shape
+    report["test_after_shape"] = clean_test.shape
+    report["columns_remaining"] = list(clean_train.columns)
+
+    return clean_train, clean_test, report
+
 
