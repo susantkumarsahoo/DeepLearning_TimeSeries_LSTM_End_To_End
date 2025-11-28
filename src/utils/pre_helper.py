@@ -604,21 +604,24 @@ def remove_outliers_iqr(df, column, report_path=None):
 
     # Filter
     df_clean = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)].copy()
-    df_shape = df.shape
-    df_clean_sapes = df_clean.shape
-    column_name = df_clean.columns
-    df_info = df_clean.info()
+    
+    # Get info as string instead of dict (info() returns None)
+    from io import StringIO
+    buffer = StringIO()
+    df_clean.info(buf=buffer)
+    df_info_str = buffer.getvalue()
 
     report = {
-        "column_name": column_name,
-        "df_shape": df_shape,
-        "df_info": df_info,
-        "df_clean_shape": df_clean_sapes,
-        "lower_bound": lower_bound,
-        "upper_bound": upper_bound,
-        "IQR": IQR,
-        "Q1": Q1,
-        "Q3": Q3
+        "column_name": column,  # Return the column name as string, not all columns
+        "df_shape": df.shape,
+        "df_info": df_info_str,  # Store as string
+        "df_clean_shape": df_clean.shape,  # Fixed typo: sapes -> shape
+        "rows_removed": df.shape[0] - df_clean.shape[0],  # Added useful metric
+        "lower_bound": float(lower_bound),  # Convert to Python float for JSON
+        "upper_bound": float(upper_bound),
+        "IQR": float(IQR),
+        "Q1": float(Q1),
+        "Q3": float(Q3)
     }
 
     return df_clean, report
