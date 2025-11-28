@@ -607,10 +607,12 @@ def remove_outliers_iqr(df, column, report_path=None):
     df_shape = df.shape
     df_clean_sapes = df_clean.shape
     column_name = df_clean.columns
+    df_info = df_clean.info()
 
     report = {
         "column_name": column_name,
         "df_shape": df_shape,
+        "df_info": df_info,
         "df_clean_shape": df_clean_sapes,
         "lower_bound": lower_bound,
         "upper_bound": upper_bound,
