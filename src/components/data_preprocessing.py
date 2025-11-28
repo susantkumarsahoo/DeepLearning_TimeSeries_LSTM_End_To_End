@@ -97,7 +97,7 @@ class Preprocessing:
             logger.info("Data profile JSON saved successfully.")
 
             # Add time features
-            df = add_time_features(df)
+            df, time_features = add_time_features(df)
 
             logger.info("Time features added successfully.")
 
@@ -131,6 +131,7 @@ class Preprocessing:
             # 1. Create final report dictionary
             final_report = {
                 "data_profile": data_profile,
+                "time_features": time_features,
                 "correlation_report": correlation_report,
                 "outliers_report": outlayers_report,
                 "decomposition_report": decomposition_report,
@@ -138,6 +139,7 @@ class Preprocessing:
                 "variance_inflation": variance_inflation,
                 "anova_f_test": anova_f_test,
                 "outliers_removed_report": outliers_report
+
             }
 
             # 3. Save readable text report (human-friendly)

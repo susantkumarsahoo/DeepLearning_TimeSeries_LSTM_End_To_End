@@ -59,18 +59,8 @@ stages:
       - artifacts/feature_engineering/test_features.csv
       - artifacts/feature_engineering/train_features.csv
 
-  feature_transformer:
-    cmd: python src/pipelines/feature_transformer_pipeline.py
-    deps:
-      - src/constants/paths.py
-      - src/utils/feature_transformer_helper.py
-      - src/entity/components_config_entity.py
-      - src/components/feature_transformer.py
-      - artifacts/feature_engineering/test_features.csv
-      - artifacts/feature_engineering/train_features.csv
-    outs:
-      - artifacts/feature_transformer/test_features.csv
-      - artifacts/feature_transformer/train_features.csv
+
+
 
 
 

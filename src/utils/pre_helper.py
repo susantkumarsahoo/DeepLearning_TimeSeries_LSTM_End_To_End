@@ -81,7 +81,7 @@ def split_train_test(df: pd.DataFrame, test_size: float = 0.2, random_state: int
 
 import pandas as pd
 
-def add_time_features(df: pd.DataFrame, date_column: str = "date") -> pd.DataFrame:
+def add_time_features(df: pd.DataFrame, date_column: str = "date", json_path: str = None) -> pd.DataFrame:
     """
     Convert date column to datetime and generate core time-based features.
 
@@ -91,11 +91,13 @@ def add_time_features(df: pd.DataFrame, date_column: str = "date") -> pd.DataFra
         Input dataset.
     date_column : str
         Name of the date column.
+    json_path : str, optional
+        Path for JSON output (currently unused).
 
     Returns
     -------
-    pd.DataFrame
-        DataFrame with added time features.
+    tuple
+        DataFrame with added time features and a report dictionary.
     """
 
     # Convert to datetime
@@ -111,7 +113,15 @@ def add_time_features(df: pd.DataFrame, date_column: str = "date") -> pd.DataFra
     df["day_of_month"] = df[date_column].dt.day
     df["day_of_year"] = df[date_column].dt.dayofyear
 
-    return df
+    report = {
+        "hour": df["hour"].nunique(),
+        "day_of_week": df["day_of_week"].nunique(),
+        "day_of_month": df["day_of_month"].nunique(),
+        "day_of_year": df["day_of_year"].nunique(),
+        'columns_names': df.columns.tolist()  # Convert to list for JSON serialization
+    }
+
+    return df, report
 
 
 import pandas as pd
@@ -594,8 +604,6 @@ def remove_outliers_iqr(df, column, report_path=None):
 
     # Filter
     df_clean = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)].copy()
-    df_clean.set_index('date', inplace=True)
-
     df_shape = df.shape
     df_clean_sapes = df_clean.shape
     column_name = df_clean.columns
@@ -610,7 +618,6 @@ def remove_outliers_iqr(df, column, report_path=None):
         "Q1": Q1,
         "Q3": Q3
     }
-
 
     return df_clean, report
 

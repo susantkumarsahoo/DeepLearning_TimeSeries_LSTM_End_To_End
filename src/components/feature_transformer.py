@@ -47,17 +47,18 @@ class FeatureTransformer:
             test_df = pd.read_csv(self.feature_engineering_artifact.test_feature_file)
 
             # drop time features
-            train_df, report = drop_time_features(train_df)
-            test_df, report = drop_time_features(test_df)
+            train_df, train_report = drop_time_features(train_df)
 
-            
+            test_df, test_report = drop_time_features(test_df)
+
+
             # save data
             train_df.to_csv(self.transformation_config.train_transformation_path, index=False)
             test_df.to_csv(self.transformation_config.test_transformation_path, index=False)
 
             # save report
             
-            save_json(report, self.transformation_config.transformation_report_path)
+            save_json(train_report,test_report, self.transformation_config.transformation_report_path)
 
             # save artifact
             transformation_artifact = TransformationArtifact(
