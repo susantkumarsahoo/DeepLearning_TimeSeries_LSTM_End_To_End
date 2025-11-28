@@ -13,12 +13,12 @@ stages:
       size: 8933
     - path: src/constants/paths.py
       hash: md5
-      md5: 9721fb493cc9e7d23b0d02a0bd50f47d
-      size: 5641
+      md5: 9a264e78529c8eb3cc598736c5b55173
+      size: 5711
     - path: src/entity/components_config_entity.py
       hash: md5
-      md5: 48a703116122ad62c06111b26340a337
-      size: 4791
+      md5: 6dce3f1a5a6f3bed589aa7819a654de6
+      size: 4794
     - path: src/utils/helpers.py
       hash: md5
       md5: 08f102c7e1e787f92f3faa8d82ec9010
@@ -69,12 +69,12 @@ stages:
       size: 28033
     - path: src/constants/paths.py
       hash: md5
-      md5: 9721fb493cc9e7d23b0d02a0bd50f47d
-      size: 5641
+      md5: 9a264e78529c8eb3cc598736c5b55173
+      size: 5711
     - path: src/entity/components_config_entity.py
       hash: md5
-      md5: 48a703116122ad62c06111b26340a337
-      size: 4791
+      md5: 6dce3f1a5a6f3bed589aa7819a654de6
+      size: 4794
     - path: src/utils/handler.py
       hash: md5
       md5: 702e2757464ab2ba52a4708266208d7f
@@ -109,12 +109,12 @@ stages:
       size: 7658
     - path: src/constants/paths.py
       hash: md5
-      md5: 9721fb493cc9e7d23b0d02a0bd50f47d
-      size: 5641
+      md5: 9a264e78529c8eb3cc598736c5b55173
+      size: 5711
     - path: src/entity/components_config_entity.py
       hash: md5
-      md5: 48a703116122ad62c06111b26340a337
-      size: 4791
+      md5: 6dce3f1a5a6f3bed589aa7819a654de6
+      size: 4794
     - path: src/utils/handler.py
       hash: md5
       md5: 702e2757464ab2ba52a4708266208d7f
@@ -153,12 +153,12 @@ stages:
       size: 2890
     - path: src/constants/paths.py
       hash: md5
-      md5: 9721fb493cc9e7d23b0d02a0bd50f47d
-      size: 5641
+      md5: 9a264e78529c8eb3cc598736c5b55173
+      size: 5711
     - path: src/entity/components_config_entity.py
       hash: md5
-      md5: 48a703116122ad62c06111b26340a337
-      size: 4791
+      md5: 6dce3f1a5a6f3bed589aa7819a654de6
+      size: 4794
     - path: src/utils/features_engineering_helpers.py
       hash: md5
       md5: 46e9a11f62992ebd66fb9ac4818fddba
@@ -176,3 +176,43 @@ stages:
       hash: md5
       md5: 49a3fb1eb9d2add74351fe67c4f21fde
       size: 8507830
+  feature_transformer:
+    cmd: python src/pipelines/feature_transformer_pipeline.py
+    deps:
+    - path: artifacts/feature_engineering/test_features.csv
+      hash: md5
+      md5: 49a3fb1eb9d2add74351fe67c4f21fde
+      size: 8507830
+    - path: artifacts/feature_engineering/train_features.csv
+      hash: md5
+      md5: 49a3fb1eb9d2add74351fe67c4f21fde
+      size: 8507830
+    - path: src/components/feature_transformer.py
+      hash: md5
+      md5: 79da3062e6d1f1dd4bd2fdef5be0a6ef
+      size: 2742
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 9a264e78529c8eb3cc598736c5b55173
+      size: 5711
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: 6dce3f1a5a6f3bed589aa7819a654de6
+      size: 4794
+    - path: src/utils/feature_transformer_helper.py
+      hash: md5
+      md5: 877b465608673f316b93df33658b158e
+      size: 1619
+    outs:
+    - path: artifacts/data_transformation/test_features.csv
+      hash: md5
+      md5: c9825f402e470910a53d9b489925e78c
+      size: 7933608
+    - path: artifacts/data_transformation/train_features.csv
+      hash: md5
+      md5: c9825f402e470910a53d9b489925e78c
+      size: 7933608
+    - path: artifacts/data_transformation/transformation_report.json
+      hash: md5
+      md5: bdd6d6a46f07ff0579fdfce2b5be2de0
+      size: 660
