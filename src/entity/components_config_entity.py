@@ -77,5 +77,28 @@ class FeatureEngineeringConfig:
             self.feature_engineering_dir, FEATURE_ENGINEERING_TEST_FILE
         )
         
+class TransformationConfig:
+    def __init__(self):
+        # Main directory for transformation artifacts
+        self.transformation_dir = os.path.join(
+            ARTIFACTS_DIR, DATA_TRANSFORMATION_DIR
+        )
+        os.makedirs(self.transformation_dir, exist_ok=True)
 
+        # Report file path
+        self.transformation_report_path = os.path.join(
+            self.transformation_dir, DATA_TRANSFORMATION_REPORT_FILE
+        )
+
+        # Train & Test transformed output paths
+        self.train_transformation_path = os.path.join(
+            self.transformation_dir, DATA_TRANSFORMATION_TRAIN_FILE
+        )
+        self.test_transformation_path = os.path.join(
+            self.transformation_dir, DATA_TRANSFORMATION_TEST_FILE
+        )
+
+        self.pkl_transformation_path = os.path.join(
+            self.transformation_dir, DATA_TRANSFORMATION_PKL_FILE
+        )
   

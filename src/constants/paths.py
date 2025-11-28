@@ -75,9 +75,9 @@ FEATURE_ENGINEERING_REPORT_FILE    = "feature_engineering_report.json"
 # DATA TRANSFORMATION CONSTANTS
 # =====================================================================
 DATA_TRANSFORMATION_DIR          = "data_transformation"
-DATA_TRANSFORMATION_X_FILE       = "features_X.npy"
-DATA_TRANSFORMATION_Y_FILE       = "target_y.npy"
-DATA_TRANSFORMATION_OBJECT_FILE  = "preprocessor.pkl"
+DATA_TRANSFORMATION_TRAIN_FILE       = "train_features.csv"
+DATA_TRANSFORMATION_TEST_FILE       = "test_features.csv"
+DATA_TRANSFORMATION_PKL_FILE  = "preprocessor.pkl"
 DATA_TRANSFORMATION_REPORT_FILE  = "transformation_report.json"
 
 

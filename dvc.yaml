@@ -27,12 +27,7 @@ stages:
       - artifacts/data_ingestion/split/test.csv
       - artifacts/data_ingestion/schema.json
     outs:
-      # Only include STABLE validation result
       - artifacts/data_validation/validation_status.json
-
-      # Do NOT track dynamic reports (they change every run)
-      # Store them OUTSIDE DVC tracking
-      # Example: reports/data_validation/*.json (not in DVC)
 
   data_preprocessing:
     cmd: python src/pipelines/data_preprocessing_pipeline.py
@@ -63,6 +58,19 @@ stages:
     outs:
       - artifacts/feature_engineering/test_features.csv
       - artifacts/feature_engineering/train_features.csv
+
+  feature_transformer:
+    cmd: python src/pipelines/feature_transformer_pipeline.py
+    deps:
+      - src/constants/paths.py
+      - src/utils/feature_transformer_helper.py
+      - src/entity/components_config_entity.py
+      - src/components/feature_transformer.py
+      - artifacts/feature_engineering/test_features.csv
+      - artifacts/feature_engineering/train_features.csv
+    outs:
+      - artifacts/feature_transformer/test_features.csv
+      - artifacts/feature_transformer/train_features.csv
 
 
 

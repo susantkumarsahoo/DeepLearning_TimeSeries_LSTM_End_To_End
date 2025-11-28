@@ -53,7 +53,7 @@ class FeatureEngineeringArtifact:
 class TransformationArtifact:
     train_transformed_file: str
     test_transformed_file: str
-    transformer_object_file: str
+    transformer_pkl_file: str
     transformation_report_file: str
 
 
