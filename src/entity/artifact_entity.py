@@ -53,7 +53,6 @@ class FeatureEngineeringArtifact:
 class TransformationArtifact:
     train_transformed_file: str
     test_transformed_file: str
-#   transformer_pkl_file: str
     transformation_report_file: str
 
 
@@ -64,6 +63,7 @@ class TransformationArtifact:
 class TrainingArtifact:
     trained_model_file: str
     training_report_file: str
+    scalling_preprocessor_pkl_file: str
 
 
 # ----------------------------------------------------------------------
