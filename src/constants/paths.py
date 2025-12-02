@@ -85,7 +85,7 @@ DATA_TRANSFORMATION_REPORT_FILE  = "transformation_report.json"
 # MODEL TRAINING CONSTANTS
 # =====================================================================
 MODEL_TRAINING_DIR         = "model_training"
-MODEL_TRAINING_BEST_FILE   = "best_model.pkl"
+MODEL_TRAINING_FILE   = "best_model.pkl"
 MODEL_TRAINING_REPORT_FILE = "model_report.json"
 
 

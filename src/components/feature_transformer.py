@@ -19,7 +19,7 @@ from src.exceptions.exception import ProjectException
 from src.entity.components_config_entity import TransformationConfig
 from src.entity.artifact_entity import FeatureEngineeringArtifact, TransformationArtifact
 from src.utils.helpers import save_json
-from src.utils.feature_transformer_helper import clean_features
+from src.utils.feature_transformer_helper import clean_features,load_train_test
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 
@@ -45,6 +45,11 @@ class FeatureTransformer:
             # load data
             train_df = pd.read_csv(self.feature_engineering_artifact.train_feature_file)
             test_df = pd.read_csv(self.feature_engineering_artifact.test_feature_file)
+
+
+
+            
+        
 
             # drop time features
             train_clean, test_clean, info_report = clean_features(train_df, test_df, cols_to_drop)

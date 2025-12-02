@@ -53,3 +53,85 @@ def clean_features(
     return clean_train, clean_test, report
 
 
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+def split_dataset(X, y, test_size=0.2, random_state=42, shuffle=True):
+    """
+    Splits dataset into train and test sets.
+
+    Parameters
+    ----------
+    X : array-like or DataFrame
+        Feature matrix (independent variables).
+    y : array-like or Series
+        Target variable.
+    test_size : float, optional (default=0.2)
+        Proportion of dataset to include in test split.
+    random_state : int, optional (default=42)
+        Seed for reproducibility.
+    shuffle : bool, optional (default=True)
+        Whether to shuffle before splitting.
+
+    Returns
+    -------
+    X_train, X_test, y_train, y_test : arrays/DataFrames
+        Split datasets.
+    """
+    try:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=random_state, shuffle=shuffle
+        )
+        return X_train, X_test, y_train, y_test
+    except Exception as e:
+        raise ValueError(f"Error during train-test split: {e}")
+
+
+
+import pandas as pd
+
+def load_train_test(train_path, test_path, target_column):
+    """
+    Load train and test CSV files and split into features (X) and target (y).
+    
+    Parameters
+    ----------
+    train_path : str
+        Path to train.csv file
+    test_path : str
+        Path to test.csv file
+    target_column : str
+        Name of the target column in both datasets
+    
+    Returns
+    -------
+    X_train, y_train, X_test, y_test : DataFrames/Series
+        Train and test splits
+    """
+    try:
+        # Load CSVs
+        train_df = pd.read_csv(train_path)
+        test_df = pd.read_csv(test_path)
+        
+        # Separate features and target
+        X_train = train_df.drop(columns=[target_column])
+        y_train = train_df[target_column]
+        
+        X_test = test_df.drop(columns=[target_column])
+        y_test = test_df[target_column]
+        
+        return X_train, y_train, X_test, y_test
+    
+    except Exception as e:
+        raise ValueError(f"Error loading datasets: {e}")
+
+
+
+
+
+
+
+
+
+
