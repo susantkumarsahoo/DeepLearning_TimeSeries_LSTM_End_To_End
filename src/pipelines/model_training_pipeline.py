@@ -1,21 +1,25 @@
 import sys
 from src.logging.logger import get_logger
-from src.constants.paths import dataset_path
 from src.exceptions.exception import ProjectException
 from src.entity.artifact_entity import TransformationArtifact
 from src.entity.model_config_entity import ModelTrainingConfig
 from src.models.trainer import ModelTrainer
-
+from src.constants.paths import dataset_path
 
 logger = get_logger(__name__)
 
 
-def initiate_model_training( transformation_artifact) -> None:
+def initiate_model_training(transformation_artifact: TransformationArtifact):
     try:
         logger.info("Model Training Initiated")
 
         model_training_config = ModelTrainingConfig()
-        model_trainer = ModelTrainer(transformation_artifact=transformation_artifact, model_training_config=model_training_config)
+
+        model_trainer = ModelTrainer(
+            transformation_artifact=transformation_artifact,
+            model_training_config=model_training_config
+        )
+
         model_training_artifact = model_trainer.initiate_model_training()
 
         logger.info("Model Training Completed")
@@ -24,6 +28,7 @@ def initiate_model_training( transformation_artifact) -> None:
 
     except Exception as e:
         raise ProjectException(e, sys)
+
     
 if __name__ == '__main__':
 
