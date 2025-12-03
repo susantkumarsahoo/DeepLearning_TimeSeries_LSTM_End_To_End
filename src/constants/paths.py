@@ -84,7 +84,7 @@ DATA_TRANSFORMATION_REPORT_FILE  = "transformation_report.json"
 # MODEL TRAINING CONSTANTS
 # =====================================================================
 MODEL_TRAINING_DIR         = "model_training"
-MODEL_TRAINING_FILE   = "best_model.pkl"
+MODEL_TRAINING_FILE   = "lstm_model.keras"
 SCALLING_TRANSFORMATION_PKL_FILE  = "scalling_preprocessor.pkl"
 MODEL_TRAINING_REPORT_FILE = "model_report.json"
 
@@ -100,7 +100,7 @@ MODEL_EVALUATION_REPORT_FILE = "model_evaluation_report.json"
 # MODEL DEPLOYMENT CONSTANTS
 # =====================================================================
 MODEL_DEPLOYMENT_DIR               = "deployment_artifacts"
-MODEL_DEPLOYMENT_MODEL_FILE        = "best_model.pkl"
+MODEL_DEPLOYMENT_MODEL_FILE        = "lstm_model.keras"
 MODEL_DEPLOYMENT_PREPROCESSOR_FILE = "preprocessor.pkl"
 MODEL_DEPLOYMENT_REPORT_FILE       = "model_deployment_report.json"
 
@@ -133,3 +133,4 @@ TARGET_COLUMN = "megawatthours"
 # =====================================================================
 dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
 cols_to_drop = ["hour", "day_of_week", "day_of_month", "day_of_year"]
+seq_length = 7

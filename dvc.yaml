@@ -73,6 +73,22 @@ stages:
       - artifacts/data_transformation/test_features.csv
       - artifacts/data_transformation/transformation_report.json
 
+  model_training:
+    cmd: python src/pipelines/model_training_pipeline.py
+    deps:
+      - src/constants/paths.py
+      - src/utils/helpers.py
+      - src/utils/handler.py
+      - src/utils/model_training_helper.py
+      - src/entity/artifact_entity.py
+      - src/entity/components_config_entity.py
+      - src/entity/model_config_entity.py
+      - src/models/trainer.py
+      - artifacts/data_transformation/train_features.csv
+      - artifacts/data_transformation/test_features.csv
+    outs:
+      - artifacts/model_training/lstm_model.keras
+
 
 
 
