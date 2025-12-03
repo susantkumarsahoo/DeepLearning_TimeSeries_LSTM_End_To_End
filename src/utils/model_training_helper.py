@@ -150,8 +150,8 @@ def build_and_train_lstm(
     # ================================
     # CALLBACKS
     # ================================
-    early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=1e-5)
+    early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
     # ================================
     # TRAIN MODEL

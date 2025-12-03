@@ -9,7 +9,7 @@ from src.constants.paths import dataset_path
 logger = get_logger(__name__)
 
 
-def initiate_model_training(transformation_artifact: TransformationArtifact):
+def initiate_model_training(transformation_artifact) -> None:
     try:
         logger.info("Model Training Initiated")
 
