@@ -30,24 +30,53 @@ def split_dataset_report(
     X_train_seq, y_train_seq,
     X_test_seq, y_test_seq
 ):
+    import numpy as np
+    import pandas as pd
+
     def get_info(name, data):
-        """Extract dataset info into a dictionary."""
+        """Extract safe dataset info without crashing on non-numeric values."""
+        
+        # Convert DataFrame/Series to ndarray
         if isinstance(data, (pd.DataFrame, pd.Series)):
             arr = data.values
         else:
             arr = np.array(data)
 
-        return {
+        # Try converting to float
+        try:
+            numeric_arr = arr.astype(float)
+            is_numeric = True
+        except Exception:
+            numeric_arr = None
+            is_numeric = False
+
+        info = {
             "name": name,
             "type": str(type(data)),
             "shape": arr.shape,
             "dtype": str(arr.dtype),
-            "min": float(np.min(arr)) if arr.size > 0 else None,
-            "max": float(np.max(arr)) if arr.size > 0 else None,
-            "mean": float(np.mean(arr)) if arr.size > 0 else None,
-            "std": float(np.std(arr)) if arr.size > 0 else None,
-            "nan_count": int(np.isnan(arr).sum()) if np.issubdtype(arr.dtype, np.number) else None
         }
+
+        if is_numeric and numeric_arr.size > 0:
+            info.update({
+                "min": float(np.nanmin(numeric_arr)),
+                "max": float(np.nanmax(numeric_arr)),
+                "mean": float(np.nanmean(numeric_arr)),
+                "std": float(np.nanstd(numeric_arr)),
+                "nan_count": int(np.isnan(numeric_arr).sum())
+            })
+        else:
+            # Non-numeric fallback
+            info.update({
+                "min": None,
+                "max": None,
+                "mean": None,
+                "std": None,
+                "nan_count": None,
+                "note": "Non-numeric data — statistics skipped"
+            })
+
+        return info
 
     datasets = [
         get_info("X_train_scaled", X_train_scaled),
