@@ -216,3 +216,51 @@ stages:
       hash: md5
       md5: bdd6d6a46f07ff0579fdfce2b5be2de0
       size: 660
+  model_training:
+    cmd: python src/pipelines/model_training_pipeline.py
+    deps:
+    - path: artifacts/data_transformation/test_features.csv
+      hash: md5
+      md5: c9825f402e470910a53d9b489925e78c
+      size: 7933608
+    - path: artifacts/data_transformation/train_features.csv
+      hash: md5
+      md5: c9825f402e470910a53d9b489925e78c
+      size: 7933608
+    - path: src/constants/paths.py
+      hash: md5
+      md5: a122c268964935c60425dc22a3fc9375
+      size: 5738
+    - path: src/entity/artifact_entity.py
+      hash: md5
+      md5: 7608b705bb24ab31ba811d63a3955cfd
+      size: 3238
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: 0d2c359f790b91af38b0f9d9b895b08a
+      size: 4657
+    - path: src/entity/model_config_entity.py
+      hash: md5
+      md5: 933a5a2d64211e862bc5c72ece87c46d
+      size: 526
+    - path: src/models/trainer.py
+      hash: md5
+      md5: cd1117c7b3a809452c77e6b2678a4879
+      size: 4775
+    - path: src/utils/handler.py
+      hash: md5
+      md5: 702e2757464ab2ba52a4708266208d7f
+      size: 586
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 08f102c7e1e787f92f3faa8d82ec9010
+      size: 10343
+    - path: src/utils/model_training_helper.py
+      hash: md5
+      md5: 862788f0ec7c36a400760badb523ec8b
+      size: 5964
+    outs:
+    - path: artifacts/model_training/lstm_model.keras
+      hash: md5
+      md5: 25bea7092a914951a4430064e06a2181
+      size: 1642639
