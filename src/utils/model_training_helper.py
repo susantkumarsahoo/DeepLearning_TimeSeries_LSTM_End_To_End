@@ -170,3 +170,67 @@ def build_and_train_lstm(
     # ================================
     report = history.history
     return model, report
+
+
+import pandas as pd
+
+def prepare_datetime_index(
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    date_col: str
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Converts the specified date column to datetime, sets it as index,
+    and returns clean train/test dataframes.
+
+    Parameters
+    ----------
+    train_df : pd.DataFrame
+        Training dataset.
+    test_df : pd.DataFrame
+        Testing dataset.
+    date_col : str
+        Column name to convert to datetime and set as index.
+
+    Returns
+    -------
+    tuple[pd.DataFrame, pd.DataFrame]
+        Processed train and test dataframes with datetime index.
+    """
+
+    # Convert to datetime
+    train_df[date_col] = pd.to_datetime(train_df[date_col], errors="coerce")
+    test_df[date_col]  = pd.to_datetime(test_df[date_col], errors="coerce")
+
+    # Set index
+    train_df = train_df.set_index(date_col).sort_index()
+    test_df  = test_df.set_index(date_col).sort_index()
+
+    return train_df, test_df
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

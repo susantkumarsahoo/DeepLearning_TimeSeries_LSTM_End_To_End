@@ -10,7 +10,7 @@ from src.entity.model_config_entity import ModelTrainingConfig
 from src.entity.artifact_entity import TransformationArtifact,TrainingArtifact
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from src.utils.helpers import save_json
-from src.utils.model_training_helper import create_sequences,split_dataset_report,build_and_train_lstm
+from src.utils.model_training_helper import create_sequences,split_dataset_report,build_and_train_lstm,prepare_datetime_index
 
 logger = get_logger(__name__)
 
@@ -33,6 +33,10 @@ class ModelTrainer:
             # --------------------------------------------------------
             train_df = pd.read_csv(self.transformation_artifact.train_transformed_file)
             test_df = pd.read_csv(self.transformation_artifact.test_transformed_file)
+
+            # date time setup
+            train_df,test_df = prepare_datetime_index(train_df,test_df,'date')
+
 
             X_train = train_df.drop(columns=TARGET_COLUMN)
             y_train = train_df[TARGET_COLUMN]
