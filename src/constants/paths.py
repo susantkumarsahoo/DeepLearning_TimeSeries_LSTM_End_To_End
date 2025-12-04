@@ -94,6 +94,7 @@ MODEL_TRAINING_REPORT_FILE = "model_report.json"
 # =====================================================================
 MODEL_EVALUATION_DIR         = "model_evaluation"
 MODEL_EVALUATION_REPORT_FILE = "model_evaluation_report.json"
+MODEL_EVALUATION_PNG_FILE    = "model_evaluation.png"
 
 
 # =====================================================================
