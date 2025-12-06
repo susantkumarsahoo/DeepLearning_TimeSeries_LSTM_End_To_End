@@ -90,7 +90,7 @@ stages:
       - artifacts/model_training/lstm_model.keras
 
   model_evaluation:
-    cmd: python src/pipelines/model_evaluation_pipeline.py
+    cmd: python src/pipelines/model_evaluator_pipeline.py
     deps:
       - src/constants/paths.py
       - src/utils/helpers.py
@@ -107,7 +107,7 @@ stages:
       - artifacts/data_ingestion/processed/processed_data.csv
       - artifacts/model_training/lstm_model.keras
     outs:
-      - artifacts/model_evaluation/model_evaluation.json
+      - artifacts/model_evaluation/model_evaluation_report.json
 
 
 

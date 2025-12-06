@@ -241,8 +241,8 @@ stages:
       size: 4657
     - path: src/entity/model_config_entity.py
       hash: md5
-      md5: 930d7c489e00ee14bd0c91c2c9c16738
-      size: 1475
+      md5: f06f4f030e233b68cc8e93ac1d58b825
+      size: 1474
     - path: src/models/trainer.py
       hash: md5
       md5: 695c55ca420a140adafe93a45008a12b
@@ -262,5 +262,5 @@ stages:
     outs:
     - path: artifacts/model_training/lstm_model.keras
       hash: md5
-      md5: b89d5e4c8ba779d34709ac7b7dea7a4e
-      size: 1642640
+      md5: 63e8c05d7792557c7541a8233a3b8720
+      size: 1642639

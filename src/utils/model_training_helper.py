@@ -99,8 +99,8 @@ def build_and_train_lstm(
     X_test_seq,
     y_test_seq,
     seq_length,
-    epochs=100,
-    batch_size=64
+    epochs=20,
+    batch_size=32
 ):
     """
     Builds, compiles, trains an optimized LSTM model and returns both
