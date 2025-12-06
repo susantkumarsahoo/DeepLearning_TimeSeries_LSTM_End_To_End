@@ -22,11 +22,10 @@ logger = get_logger(__name__)
 
 
 class ModelTrainer:
-    def __init__(self, transformation_artifact: TransformationArtifact, model_training_config: ModelTrainingConfig, model_evaluation_config: ModelEvaluationConfig,) -> None:
+    def __init__(self, transformation_artifact: TransformationArtifact, model_training_config: ModelTrainingConfig,) -> None:
         try:
             self.transformation_artifact = transformation_artifact
             self.model_training_config = model_training_config
-            self.model_evaluation_config = model_evaluation_config
         except Exception as e:
             raise ProjectException(e, sys)
         
