@@ -6,21 +6,27 @@ import joblib
 from src.constants.paths import *
 from src.logging.logger import get_logger
 from src.exceptions.exception import ProjectException
-from src.entity.model_config_entity import ModelTrainingConfig
+from src.entity.model_config_entity import ModelTrainingConfig,ModelEvaluationConfig    
 from src.entity.artifact_entity import TransformationArtifact,TrainingArtifact
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from src.utils.helpers import save_json
 from src.utils.model_training_helper import create_sequences,split_dataset_report,build_and_train_lstm,prepare_datetime_index
+from src.models.evaluator import ModelEvaluation
+from src.utils.model_evaluator_helper import (
+    load_artifacts,
+    evaluate_lstm_model,
+    visualize_lstm_results
+)
 
 logger = get_logger(__name__)
 
 
 class ModelTrainer:
-    def __init__(self, transformation_artifact: TransformationArtifact, model_training_config: ModelTrainingConfig) -> None:
+    def __init__(self, transformation_artifact: TransformationArtifact, model_training_config: ModelTrainingConfig, model_evaluation_config: ModelEvaluationConfig,) -> None:
         try:
             self.transformation_artifact = transformation_artifact
             self.model_training_config = model_training_config
-
+            self.model_evaluation_config = model_evaluation_config
         except Exception as e:
             raise ProjectException(e, sys)
         

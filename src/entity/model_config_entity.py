@@ -19,7 +19,7 @@ class ModelEvaluationConfig:
         os.makedirs(self.eval_mode_dir, exist_ok=True)
 
         self.eval_model_report_path = os.path.join(self.eval_mode_dir, MODEL_EVALUATION_REPORT_FILE)
-        self.eval_model_png_path = os.path.join(self.eval_mode_dir, MODEL_EVALUATION_PNG_FILE)
+        #self.eval_model_png_path = os.path.join(self.eval_mode_dir, MODEL_EVALUATION_PNG_FILE)
 
 class ModelDeploymentConfig:
     def __init__(self):
