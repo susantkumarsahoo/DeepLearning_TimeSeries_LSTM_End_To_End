@@ -99,7 +99,7 @@ def build_and_train_lstm(
     X_test_seq,
     y_test_seq,
     seq_length,
-    epochs=20,
+    epochs=10,
     batch_size=32
 ):
     """

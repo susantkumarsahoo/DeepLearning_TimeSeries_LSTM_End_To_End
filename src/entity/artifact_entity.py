@@ -72,7 +72,7 @@ class TrainingArtifact:
 @dataclass
 class EvaluationArtifact:
     evaluation_report_file: str
-    #evaluated_model_png_file: str
+    evaluated_model_png_file: str
 
 
 # ----------------------------------------------------------------------
