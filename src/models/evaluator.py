@@ -19,7 +19,7 @@ from src.utils.model_training_helper import create_sequences, split_dataset_repo
 from src.utils.model_evaluator_helper import (
     load_artifacts,
     evaluate_lstm_model,
-    visualize_lstm_results
+    visualize_lstm_results,plot_and_save_history
 )
 from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -106,6 +106,12 @@ class ModelEvaluation:
                 model_name='Stock Price Prediction LSTM'
             )
 
+            # lode model_report.json
+            with open(self.model_training_artifact.training_report_file, 'r') as file:
+                report_json = json.load(file)
+
+            # visualize model_report.json
+            plot_and_save_history(report_json, self.model_evaluation_config.eval_model_png_path2)
             # --------------------------------------------------------
             # Save evaluation report
             # --------------------------------------------------------

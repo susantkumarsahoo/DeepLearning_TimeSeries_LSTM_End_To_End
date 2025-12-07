@@ -416,10 +416,52 @@ def visualize_lstm_results(
     
     # Save figure
     plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
-    print(f"✓ Visualization saved successfully: {save_path}")
     
     # Close to free memory
     plt.close()
     
     return save_path
+
+
+import matplotlib.pyplot as plt
+
+def plot_and_save_history(report, save_path="training_report.png"):
+    """
+    Plot training/validation loss and metrics from Keras history report,
+    and save the visualization as a PNG image.
+
+    Parameters:
+    -----------
+    report : dict
+        The history.history dictionary from model.fit()
+    save_path : str
+        File path to save the PNG image (default: 'training_report.png')
+    """
+
+    plt.figure(figsize=(12, 5))
+
+    # Plot training vs validation loss
+    plt.subplot(1, 2, 1)
+    plt.plot(report['loss'], label='Train Loss')
+    plt.plot(report['val_loss'], label='Validation Loss')
+    plt.title("Model Loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+
+    # Plot first available metric (other than loss)
+    metric_keys = [k for k in report.keys() if not k.startswith('val_') and k != 'loss']
+    if metric_keys:
+        metric = metric_keys[0]  # pick the first metric (e.g., 'accuracy', 'mae', 'rmse')
+        plt.subplot(1, 2, 2)
+        plt.plot(report[metric], label=f'Train {metric}')
+        plt.plot(report[f'val_{metric}'], label=f'Validation {metric}')
+        plt.title(f"Model {metric.capitalize()}")
+        plt.xlabel("Epochs")
+        plt.ylabel(metric.capitalize())
+        plt.legend()
+
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
 

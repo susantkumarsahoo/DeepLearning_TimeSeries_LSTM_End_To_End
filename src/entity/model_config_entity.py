@@ -20,6 +20,7 @@ class ModelEvaluationConfig:
 
         self.eval_model_report_path = os.path.join(self.eval_mode_dir, MODEL_EVALUATION_REPORT_FILE)
         self.eval_model_png_path = os.path.join(self.eval_mode_dir, MODEL_EVALUATION_PNG_FILE)
+        self.eval_model_png_path2 = os.path.join(self.eval_mode_dir,'evaluation.png')        
 
 class ModelDeploymentConfig:
     def __init__(self):

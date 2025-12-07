@@ -135,3 +135,6 @@ TARGET_COLUMN = "megawatthours"
 dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
 cols_to_drop = ["hour", "day_of_week", "day_of_month", "day_of_year"]
 seq_length = 7
+
+
+
