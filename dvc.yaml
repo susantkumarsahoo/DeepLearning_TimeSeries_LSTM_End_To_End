@@ -1,5 +1,3 @@
-schema: '2.0'
-
 stages:
 
   data_ingestion:
@@ -15,6 +13,7 @@ stages:
       - artifacts/data_ingestion/split/train.csv
       - artifacts/data_ingestion/split/test.csv
       - artifacts/data_ingestion/metadata.json
+      - artifacts/data_ingestion/schema.json
 
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
@@ -27,6 +26,7 @@ stages:
       - artifacts/data_ingestion/processed/processed_data.csv
       - artifacts/data_ingestion/split/train.csv
       - artifacts/data_ingestion/split/test.csv
+      - artifacts/data_ingestion/schema.json
     outs:
       - artifacts/data_validation/validation_status.json
 
@@ -109,3 +109,4 @@ stages:
       - artifacts/model_training/lstm_model.keras
     outs:
       - artifacts/model_evaluation/model_evaluation_report.json
+
