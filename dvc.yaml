@@ -1,4 +1,7 @@
+schema: '2.0'
+
 stages:
+
   data_ingestion:
     cmd: python src/pipelines/data_ingestion_pipeline.py
     deps:
@@ -12,7 +15,6 @@ stages:
       - artifacts/data_ingestion/split/train.csv
       - artifacts/data_ingestion/split/test.csv
       - artifacts/data_ingestion/metadata.json
-      - artifacts/data_ingestion/schema.json
 
   data_validation:
     cmd: python src/pipelines/data_validation_pipeline.py
@@ -25,7 +27,6 @@ stages:
       - artifacts/data_ingestion/processed/processed_data.csv
       - artifacts/data_ingestion/split/train.csv
       - artifacts/data_ingestion/split/test.csv
-      - artifacts/data_ingestion/schema.json
     outs:
       - artifacts/data_validation/validation_status.json
 
@@ -56,8 +57,8 @@ stages:
       - artifacts/data_preprocessing/train_preprocessed.csv
       - artifacts/data_preprocessing/test_preprocessed.csv
     outs:
-      - artifacts/feature_engineering/test_features.csv
       - artifacts/feature_engineering/train_features.csv
+      - artifacts/feature_engineering/test_features.csv
 
   feature_transformer:
     cmd: python src/pipelines/feature_transformer_pipeline.py
@@ -66,8 +67,8 @@ stages:
       - src/utils/feature_transformer_helper.py
       - src/entity/components_config_entity.py
       - src/components/feature_transformer.py
-      - artifacts/feature_engineering/test_features.csv
       - artifacts/feature_engineering/train_features.csv
+      - artifacts/feature_engineering/test_features.csv
     outs:
       - artifacts/data_transformation/train_features.csv
       - artifacts/data_transformation/test_features.csv
@@ -108,20 +109,3 @@ stages:
       - artifacts/model_training/lstm_model.keras
     outs:
       - artifacts/model_evaluation/model_evaluation_report.json
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-  
