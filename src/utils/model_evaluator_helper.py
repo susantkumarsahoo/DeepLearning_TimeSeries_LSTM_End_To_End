@@ -401,13 +401,18 @@ def visualize_lstm_results(
             ax9.legend(loc='best', frameon=True, shadow=True)
             ax9.grid(True, alpha=0.3)
     
-    # Add footer with timestamp and summary
-    footer_text = f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | "
-    footer_text += f"Train Samples: {len(y_train_actual)} | Test Samples: {len(y_test_actual)} | "
-    footer_text += f"Generalization Gap (RMSE): {abs(train_metrics['RMSE'] - test_metrics['RMSE']):.4f}"
-    
-    fig.text(0.5, 0.01, footer_text, ha='center', fontsize=10, 
-             style='italic', bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.5))
+            # Add footer with timestamp and summary
+            # Add footer with summary only (no timestamp)
+            footer_text  = f"Train Samples: {len(y_train_actual)} | "
+            footer_text += f"Test Samples: {len(y_test_actual)} | "
+            footer_text += f"Generalization Gap (RMSE): {abs(train_metrics['RMSE'] - test_metrics['RMSE']):.4f}"
+
+            fig.text(
+                0.5, 0.01, footer_text,
+                ha='center', fontsize=10,
+                style='italic',
+                bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.5)
+            )
     
     # Save figure
     plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
