@@ -212,6 +212,4 @@ artifacts/data_ingestion/
 artifacts/data_validation/
 artifacts/data_preprocessing/
 
-
-
-/deployed_artifacts
+deployed_artifacts/
