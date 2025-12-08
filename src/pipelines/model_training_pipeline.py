@@ -66,5 +66,5 @@ if __name__ == '__main__':
     except Exception as e:
         raise ProjectException(e, sys)
     
-# python src/pipelines/feature_transformer_pipeline.py
+# python src/pipelines/model_training_pipeline.py
 

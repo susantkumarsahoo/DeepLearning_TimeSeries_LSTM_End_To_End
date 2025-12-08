@@ -1,9 +1,10 @@
-import os
-from src.constants.paths import dataset_path
-from src.pipelines.training_pipeline import run_data_ingestion_pipeline
+from src.pipelines.training_pipeline import main
 
-#dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
-
-artifact = run_data_ingestion_pipeline( dataset_path= dataset_path)
-print(artifact)
+if __name__ == "__main__":
+    artifacts = main()
+    print("\n" + "=" * 80)
+    print("TRAINING PIPELINE EXECUTION COMPLETED")
+    print("=" * 80)
+    print("\nReturned Artifacts:")
+    print(artifacts)
 
