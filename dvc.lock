@@ -21,8 +21,8 @@ stages:
       size: 4657
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     outs:
     - path: artifacts/data_ingestion/metadata.json
       hash: md5
@@ -81,8 +81,8 @@ stages:
       size: 586
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     outs:
     - path: artifacts/data_validation/validation_status.json
       hash: md5
@@ -121,8 +121,8 @@ stages:
       size: 586
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     - path: src/utils/pre_helper.py
       hash: md5
       md5: fc7a3932318f0feb628f00403a9d9409
@@ -165,8 +165,8 @@ stages:
       size: 2016
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     outs:
     - path: artifacts/feature_engineering/test_features.csv
       hash: md5
@@ -253,8 +253,8 @@ stages:
       size: 586
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     - path: src/utils/model_training_helper.py
       hash: md5
       md5: 166ec33453b92fad1f867d98105d7bc3
@@ -262,15 +262,11 @@ stages:
     outs:
     - path: artifacts/model_training/lstm_model.keras
       hash: md5
-      md5: d8813132fba12f5940879c731d2bc02d
+      md5: 8e55cbf409ac9e68dc96be61aaac3c55
       size: 1642639
   model_evaluation:
     cmd: python src/pipelines/model_evaluator_pipeline.py
     deps:
-    - path: artifacts/data_ingestion/processed/processed_data.csv
-      hash: md5
-      md5: e41364b597243b6ac0ad74581d7b51c2
-      size: 1473420
     - path: artifacts/data_transformation/test_features.csv
       hash: md5
       md5: c9825f402e470910a53d9b489925e78c
@@ -279,10 +275,6 @@ stages:
       hash: md5
       md5: c9825f402e470910a53d9b489925e78c
       size: 7933608
-    - path: artifacts/model_training/lstm_model.keras
-      hash: md5
-      md5: c9a297fcae83cee6f553c47889480327
-      size: 1642639
     - path: src/constants/paths.py
       hash: md5
       md5: 7ead1a0a31e570e31731c1254db7f0a6
@@ -313,8 +305,8 @@ stages:
       size: 586
     - path: src/utils/helpers.py
       hash: md5
-      md5: 08f102c7e1e787f92f3faa8d82ec9010
-      size: 10343
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
     - path: src/utils/model_evaluator_helper.py
       hash: md5
       md5: 7639b3c20b13114cf3590cc3ccdba7de
@@ -324,7 +316,60 @@ stages:
       md5: 166ec33453b92fad1f867d98105d7bc3
       size: 5962
     outs:
-    - path: artifacts/model_evaluation/model_evaluation_report.json
+    - path: artifacts/model_evaluation/model_evaluation.png
       hash: md5
-      md5: 759b1dc2621e482a48f1e559b52f86cc
-      size: 883
+      md5: 200459fd6ce0d92164d0b5e9af775f3d
+      size: 4281655
+  model_pusher:
+    cmd: python src/pipelines/registry_pipeline.py
+    deps:
+    - path: artifacts/model_training/lstm_model.keras
+      hash: md5
+      md5: fc3bff15af98d50bf333c42d2a6d939f
+      size: 1642639
+    - path: src/constants/paths.py
+      hash: md5
+      md5: 7ead1a0a31e570e31731c1254db7f0a6
+      size: 5801
+    - path: src/entity/artifact_entity.py
+      hash: md5
+      md5: d5a3ad50e4004fa10e2d63e0b4717ae9
+      size: 3253
+    - path: src/entity/components_config_entity.py
+      hash: md5
+      md5: 0d2c359f790b91af38b0f9d9b895b08a
+      size: 4657
+    - path: src/entity/model_config_entity.py
+      hash: md5
+      md5: a9bce4a4ecef4472bcc2428ee15959a0
+      size: 1569
+    - path: src/models/evaluator.py
+      hash: md5
+      md5: 7fd4664d8a21f47651f2160f00e9cb7f
+      size: 6168
+    - path: src/models/model_registry.py
+      hash: md5
+      md5: 7da9ae42d9895b6b42fe8df7115ffbef
+      size: 2767
+    - path: src/models/trainer.py
+      hash: md5
+      md5: 695c55ca420a140adafe93a45008a12b
+      size: 4976
+    - path: src/utils/handler.py
+      hash: md5
+      md5: 702e2757464ab2ba52a4708266208d7f
+      size: 586
+    - path: src/utils/helpers.py
+      hash: md5
+      md5: 757dc5526cc190c32bde2622d5473a9e
+      size: 10918
+    - path: src/utils/metrics.py
+      hash: md5
+      md5: 1c7d461c2464b193496eee24a3b984de
+      size: 6528
+    outs:
+    - path: deployed_artifacts/
+      hash: md5
+      md5: 664e8ac552597a16dd24dfdb3e476d39.dir
+      size: 1652154
+      nfiles: 3
