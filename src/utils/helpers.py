@@ -338,3 +338,24 @@ def split_train_test(
         
     except Exception as e:
         raise ProjectException(e, sys)
+    
+import os
+import joblib
+import json
+from tensorflow.keras.models import save_model as keras_save_model
+
+
+def save_json(data, file_path):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+
+def save_model(model, file_path):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    keras_save_model(model, file_path)
+
+
+def save_object(obj, file_path):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    joblib.dump(obj, file_path)

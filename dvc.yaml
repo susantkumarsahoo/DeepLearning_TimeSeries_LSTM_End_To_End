@@ -105,8 +105,23 @@ stages:
       - src/models/evaluator.py
       - artifacts/data_transformation/train_features.csv
       - artifacts/data_transformation/test_features.csv
-      - artifacts/data_ingestion/processed/processed_data.csv
+    outs:
+      - artifacts/model_evaluation/model_evaluation.png
+
+
+  model_pusher:
+    cmd: python src/pipelines/registry_pipeline.py
+    deps:
+      - src/constants/paths.py
+      - src/utils/helpers.py
+      - src/utils/handler.py
+      - src/utils/metrics.py
+      - src/entity/artifact_entity.py
+      - src/entity/components_config_entity.py
+      - src/entity/model_config_entity.py
+      - src/models/trainer.py
+      - src/models/evaluator.py
+      - src/models/model_registry.py
       - artifacts/model_training/lstm_model.keras
     outs:
-      - artifacts/model_evaluation/model_evaluation_report.json
-
+      - deployed_artifacts/
