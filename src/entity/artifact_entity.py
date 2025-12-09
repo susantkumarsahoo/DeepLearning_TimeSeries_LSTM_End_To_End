@@ -102,3 +102,11 @@ class DatabaseArtifact:
 class LogArtifact:
     log_file: str
     log_report_file: str
+
+
+# ----------------------------------------------------------------------
+# PIPELINE ARTIFACT
+# ----------------------------------------------------------------------
+@dataclass
+class PredictorArtifact:
+    predictor_file: str

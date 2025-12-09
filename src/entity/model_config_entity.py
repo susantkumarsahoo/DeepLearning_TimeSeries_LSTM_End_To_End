@@ -32,3 +32,15 @@ class ModelDeploymentConfig:
         self.deployment_report_path = os.path.join(self.model_deployment_dir, MODEL_DEPLOYMENT_REPORT_FILE)
 
 
+
+import os
+import sys
+from src.constants.paths import *
+
+
+class PredictorConfig:
+    def __init__(self,seq_length: int = 7):
+        self.seq_length = seq_length
+        self.Predictor_dir = os.path.join(DEPLOYED_ARTIFACTS_DIR, MODEL_DEPLOYMENT_DIR)
+        self.model_path = os.path.join(self.Predictor_dir, PREDICTION_DF_FILE)
+        

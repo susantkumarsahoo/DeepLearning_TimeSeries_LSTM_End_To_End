@@ -104,6 +104,7 @@ MODEL_DEPLOYMENT_DIR               = "deployment_artifacts"
 MODEL_DEPLOYMENT_MODEL_FILE        = "lstm_model.keras"
 MODEL_DEPLOYMENT_PREPROCESSOR_FILE = "preprocessor.pkl"
 MODEL_DEPLOYMENT_REPORT_FILE       = "model_deployment_report.json"
+PREDICTION_DF_FILE = "prediction_df_results.csv"
 
 
 # =====================================================================
@@ -135,6 +136,7 @@ TARGET_COLUMN = "megawatthours"
 dataset_path = r"C:\Users\TPWODL\New folder_Content\DeepLearning_TimeSeries_LSTM_End_To_End\data\raw\Energy Demand Hourly.csv"
 cols_to_drop = ["hour", "day_of_week", "day_of_month", "day_of_year"]
 seq_length = 7
+
 
 
 
