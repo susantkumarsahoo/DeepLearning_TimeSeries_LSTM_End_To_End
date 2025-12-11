@@ -42,5 +42,5 @@ class PredictorConfig:
     def __init__(self,seq_length: int = 7):
         self.seq_length = seq_length
         self.Predictor_dir = os.path.join(DEPLOYED_ARTIFACTS_DIR, MODEL_DEPLOYMENT_DIR)
-        self.model_path = os.path.join(self.Predictor_dir, PREDICTION_DF_FILE)
+        self.model_Predictor_path = os.path.join(self.Predictor_dir, PREDICTION_DF_FILE)
         
