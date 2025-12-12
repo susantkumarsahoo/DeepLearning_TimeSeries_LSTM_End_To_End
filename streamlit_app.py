@@ -288,51 +288,62 @@ def main():
         # Date Range Selection
         st.subheader("📅 Prediction Settings")
         
-        # Default date range
-        default_start = datetime.now().date()
-        default_end = default_start + timedelta(days=30)
+        # Initialize session state for dates if not exists
+        if 'selected_start_date' not in st.session_state:
+            st.session_state.selected_start_date = datetime.now().date()
+        if 'selected_end_date' not in st.session_state:
+            st.session_state.selected_end_date = datetime.now().date() + timedelta(days=30)
         
-        start_date = st.date_input(
-            "Start Date",
-            value=default_start,
-            help="Select the start date for predictions"
-        )
-        
-        end_date = st.date_input(
-            "End Date",
-            value=default_end,
-            help="Select the end date for predictions"
-        )
-        
-        # Quick date range buttons
+        # Quick date range buttons (at top for better UX)
         st.write("Quick Select:")
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("📅 7 Days"):
-                start_date = datetime.now().date()
-                end_date = start_date + timedelta(days=7)
+            if st.button("📅 7 Days", use_container_width=True):
+                st.session_state.selected_start_date = datetime.now().date()
+                st.session_state.selected_end_date = st.session_state.selected_start_date + timedelta(days=7)
                 st.rerun()
         
         with col2:
-            if st.button("📅 30 Days"):
-                start_date = datetime.now().date()
-                end_date = start_date + timedelta(days=30)
+            if st.button("📅 30 Days", use_container_width=True):
+                st.session_state.selected_start_date = datetime.now().date()
+                st.session_state.selected_end_date = st.session_state.selected_start_date + timedelta(days=30)
                 st.rerun()
         
         col3, col4 = st.columns(2)
         
         with col3:
-            if st.button("📅 60 Days"):
-                start_date = datetime.now().date()
-                end_date = start_date + timedelta(days=60)
+            if st.button("📅 60 Days", use_container_width=True):
+                st.session_state.selected_start_date = datetime.now().date()
+                st.session_state.selected_end_date = st.session_state.selected_start_date + timedelta(days=60)
                 st.rerun()
         
         with col4:
-            if st.button("📅 90 Days"):
-                start_date = datetime.now().date()
-                end_date = start_date + timedelta(days=90)
+            if st.button("📅 90 Days", use_container_width=True):
+                st.session_state.selected_start_date = datetime.now().date()
+                st.session_state.selected_end_date = st.session_state.selected_start_date + timedelta(days=90)
                 st.rerun()
+        
+        st.write("") # Spacer
+        
+        # Date inputs (will update with button clicks)
+        start_date = st.date_input(
+            "Start Date",
+            value=st.session_state.selected_start_date,
+            help="Select the start date for predictions"
+        )
+        
+        end_date = st.date_input(
+            "End Date",
+            value=st.session_state.selected_end_date,
+            help="Select the end date for predictions"
+        )
+        
+        # Update session state if manually changed
+        if start_date != st.session_state.selected_start_date:
+            st.session_state.selected_start_date = start_date
+        if end_date != st.session_state.selected_end_date:
+            st.session_state.selected_end_date = end_date
         
         st.divider()
         
@@ -533,5 +544,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Run with: streamlit run streamlit_app.py
 
 # Run with: streamlit run streamlit_app.py
