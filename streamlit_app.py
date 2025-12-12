@@ -82,22 +82,63 @@ def generate_predictions(start_date, end_date):
             "end_date": end_date.strftime("%Y-%m-%d")
         }
         
-        with st.spinner("🔄 Generating predictions... This may take a few moments."):
+        # Calculate expected time based on date range
+        days_diff = (end_date - start_date).days
+        estimated_seconds = max(5, days_diff * 0.15)  # Rough estimate
+        
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        status_text.text(f"🔄 Generating predictions for {days_diff} days...")
+        progress_bar.progress(10)
+        
+        # Make request with extended timeout
+        timeout_seconds = max(300, days_diff * 2)  # At least 5 minutes, scale with days
+        
+        status_text.text(f"⏳ Processing... This may take {int(estimated_seconds)} seconds for large ranges")
+        progress_bar.progress(30)
+        
+        import time
+        start_time = time.time()
+        
+        try:
             response = requests.post(
                 f"{API_BASE_URL}/predict",
                 json=payload,
-                timeout=300
+                timeout=timeout_seconds
             )
-        
-        if response.status_code == 200:
-            return True, response.json()
-        else:
-            error_detail = response.json().get('detail', 'Unknown error')
-            return False, error_detail
             
-    except requests.exceptions.Timeout:
-        return False, "Request timed out. Please try with a smaller date range."
+            elapsed = time.time() - start_time
+            progress_bar.progress(90)
+            status_text.text(f"✅ Completed in {elapsed:.1f} seconds")
+            
+            time.sleep(0.5)  # Brief pause to show completion
+            progress_bar.progress(100)
+            
+            # Clear progress indicators
+            progress_bar.empty()
+            status_text.empty()
+            
+            if response.status_code == 200:
+                return True, response.json()
+            else:
+                error_detail = response.json().get('detail', 'Unknown error')
+                return False, error_detail
+                
+        except requests.exceptions.Timeout:
+            progress_bar.empty()
+            status_text.empty()
+            return False, f"Request timed out after {timeout_seconds} seconds. Try a smaller date range."
+        except requests.exceptions.ConnectionError:
+            progress_bar.empty()
+            status_text.empty()
+            return False, "Connection error. Make sure FastAPI is running on http://localhost:8000"
+            
     except Exception as e:
+        if 'progress_bar' in locals():
+            progress_bar.empty()
+        if 'status_text' in locals():
+            status_text.empty()
         return False, str(e)
 
 
@@ -300,6 +341,13 @@ def main():
             if start_date >= end_date:
                 st.error("End date must be after start date!")
             else:
+                days_diff = (end_date - start_date).days
+                
+                # Warning for large date ranges
+                if days_diff > 90:
+                    st.warning(f"⚠️ Large date range ({days_diff} days) will take longer to process.")
+                    st.info("💡 Tip: For faster results, try smaller ranges (7-30 days)")
+                
                 success, result = generate_predictions(
                     datetime.combine(start_date, datetime.min.time()),
                     datetime.combine(end_date, datetime.min.time())

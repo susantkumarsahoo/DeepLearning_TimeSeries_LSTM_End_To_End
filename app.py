@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from datetime import datetime, timedelta
 from typing import Optional, List
@@ -135,7 +135,8 @@ async def root():
             "health": "/health",
             "predict": "/predict",
             "model_info": "/model-info",
-            "download_predictions": "/download/{filename}"
+            "download_predictions": "/download/{filename}",
+            "predictions_history": "/predictions/history"
         }
     }
 
@@ -345,12 +346,14 @@ if __name__ == "__main__":
     import uvicorn
     
     # Run the FastAPI application
+    # FIXED: Changed from 172.0.0.1 to 0.0.0.0 (correct host)
     uvicorn.run(
         "app:app",
-        host="172.0.0.1",
+        host="0.0.0.0",
         port=8000,
         reload=True,
         log_level="info"
     )
 
-# python app.py
+# To run this application:
+# uvicorn app:app --reload --host 0.0.0.0 --port 8000
